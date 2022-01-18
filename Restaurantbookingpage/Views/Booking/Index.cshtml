@@ -1,0 +1,156 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Restaurant Booking</h2>
+
+<p><button type="button" class="btn btn-info btn-lg" onclick="createbooking()">Create New</button></p>
+
+<table class="ui celled table border-0" id="BookingTable">
+    <thead>
+        <tr class="headercolour">
+            <th>
+                Cutomer Name
+            </th>
+            <th>
+                Date of Booking
+            </th>
+            <th>
+                Dinning Type
+            </th>
+            <th>
+                Number of Guest
+            </th>
+            <th>Action</th>
+        </tr>
+    </thead>
+
+</table>
+
+<div class="modal fade" id="bookingmodal" role="dialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" id="bookingmodalbody">
+
+        </div>
+
+    </div>
+</div>
+
+<script>
+    var dataTable;
+    $(document).ready(function () {
+
+        dataTable = $('#BookingTable').DataTable(
+
+            {
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "bInfo": false,
+
+                "ajax": {
+
+                    "url": "/Booking/BookingData",
+
+                    "type": "Post",
+
+                    "datatype": "json"
+
+                },
+
+                "columns": [
+
+                    { "data": "Customer_Name" },
+
+                    {
+                        "data": "Datetime",
+                        "type": "shortdatetime",
+                        "render": function (value) {
+                            if (value === null) return "";
+                            var pattern = /Date\(([^)]+)\)/;
+                            var results = pattern.exec(value);
+                            var dt = new Date(parseFloat(results[1]));
+                            return dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear()
+                        }
+                    },
+
+                    { "data": "Dinning_Type" },
+
+                    { "data": "NumberofGuest" },
+
+                    {
+                        "data": "Id",
+                        "render": function (booking) {
+                            return ('<button id="viewclick" class"btn btn-success" onclick="getDetails(' + booking + ')">View</button> <button class"btn btn-success" onclick="getDelete(' + booking + ')">Delete</button> ');
+                        }
+
+                    }]
+           
+            });
+    });
+
+    function createbooking() {
+        $.get("/Booking/Create", function (res) {
+            $("#bookingmodalbody").html(res);
+            $("#bookingmodal").modal('show');
+            $('#editclick').prop('disabled', 'true');
+        })
+    }
+
+    function Savebooking() {
+        var modal = $("#bookingmodal");
+        var form = $('form[name="bookingForm"]');
+        form.validate();
+        if (!form.valid()) {
+            return;
+        } else {
+            var data = form.serialize();
+            $.post("/Booking/CreateEdit", data, function (res) {
+                if (res) {
+                    modal.modal('hide');
+                    dataTable.ajax.reload();
+                }
+            })
+        }
+    }
+
+    function getDetails(id) {
+        $.get("/Booking/Edit", { id: id }, function (res) {
+            $('#bookingmodalbody').html(res);
+            $('#bookingmodal').modal('show');
+            $('#saveclick').prop('disabled', 'true');
+            $('#Customer_Name').prop('disabled', 'true');
+            $('#Datetime').prop('disabled', 'true');
+            $('#Dinning_Type').prop('disabled', 'true');
+            $('#NumberofGuest').prop('disabled', 'true');
+            $('Dinning_Type').val(res.Dinning_Type);
+            console.log(res);
+        })
+    }
+
+    function getDelete(id) {
+        $.get("/Booking/DeletePartial", { id: id }, function (res) {
+            $('#bookingmodalbody').html(res);
+            $('#bookingmodal').modal('show');
+        })
+    }
+
+    function Deletebooking(id) {
+        if (confirm("Confirm Delete?") == true) {
+            var modal = $("#bookingmodal");
+            var form = $('form[name="bookingdeleteForm"]');
+            form.validate();
+            if (!form.valid()) {
+                return;
+            } else {
+                var data = form.serialize();
+                $.post("/Booking/Delete", data, function (res) {
+                    if (res) {
+                        modal.modal('hide');
+                        dataTable.ajax.reload();
+                    }
+                })
+            }
+        }
+    }
+</script>

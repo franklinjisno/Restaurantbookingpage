@@ -1,0 +1,48 @@
+﻿@model BookingClass.Bookingmodel
+<form name="bookingdeleteForm">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            <span><b>Delete Booking</b></span>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        </h4>
+    </div>
+    <div class="modal-body">
+        @Html.HiddenFor(c => c.Id)
+        <div class="row">
+            <div class="col-md-10">
+                <div class="form-group">
+                    <h5><b>Customer Name</b></h5>
+                    <div class="col-md-auto">
+                        @Html.DisplayFor(model => model.Customer_Name, new { htmlAttributes = new { @class = "form-control" } })
+                        
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h5><b>Date Time</b></h5>
+                    <div class="col-md-auto">
+                        @Html.DisplayFor(model => model.Datetime, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h5><b>Dinning Type</b></h5>
+                    <div class="col-md-auto">
+                        @Html.DisplayFor(model => model.Dinning_Type, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <h5><b>Number of Guests</b></h5>
+                    <div class="col-md-auto">
+                        @Html.DisplayFor(model => model.NumberofGuest, new { htmlAttributes = new { @class = "form-control" } })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-sm pull-right" data-dismiss="modal">Cancel</button>
+        <button type="button" onclick="Deletebooking()" class="btn btn-sm btn-success pull-right">Delete</button>
+    </div>
+</form>

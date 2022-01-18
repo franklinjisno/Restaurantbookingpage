@@ -1,0 +1,66 @@
+﻿@model BookingClass.Bookingmodel
+    <form name="bookingForm">
+        <div class="modal-header">
+            <h4 class="modal-title">
+                <span><b>Booking</b></span>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            </h4>
+        </div>
+        <div class="modal-body">
+            @Html.HiddenFor(c=>c.Id)
+            <div class="row">
+                <div class="col-md-auto">
+                    <div class="form-group">
+                        <h5><b>Customer Name</b></h5>
+                        <div class="col-md-auto">
+                            @Html.EditorFor(model => model.Customer_Name, new { htmlAttributes = new { @Id = "Customer_Name", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Customer_Name, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h5><b>Date Time</b></h5>
+                        <div class="col-md-auto">
+                            @Html.EditorFor(model => model.Datetime, new { htmlAttributes = new { @Id = "Datetime" , @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.Datetime, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h5><b>Dinning Type</b></h5>
+                        <div class="col-md-auto">
+                            <select class="form-control" name="Dinning_Type" id="Dinning_Type">
+                                <option value="Indoor">Indoor</option>
+                                <option value="Outdoor">Outdoor</option>
+                                <option value="Terrace">Terrace</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <h5><b>Number of Guests</b></h5>
+                        <div class="col-md-auto">
+                            @Html.EditorFor(model => model.NumberofGuest, new { htmlAttributes = new { @Id = "NumberofGuest", @class = "form-control" } })
+                            @Html.ValidationMessageFor(model => model.NumberofGuest, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-sm pull-right" data-dismiss="modal">Cancel</button>
+            <button type="button" id="saveclick" onclick="Savebooking()" class="btn btn-sm btn-success pull-right">Save</button>
+            <button type="button" id="editclick" onclick="enableedit()" class="btn btn-sm btn-success pull-right">Edit</button>
+        </div>
+    </form>
+<script>
+    function enableedit() {
+        document.getElementById("Customer_Name").disabled = false;
+        document.getElementById("Datetime").disabled = false;
+        document.getElementById("Dinning_Type").disabled = false;
+        document.getElementById("NumberofGuest").disabled = false;
+        document.getElementById("saveclick").disabled = false;
+        document.getElementById("editclick").disabled = true;
+        document.getElementById("Datetime").nodeType = Text;
+    }
+</script>
