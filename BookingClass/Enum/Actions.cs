@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace BookingClass.Enum
 {
-    public enum Operations
+    public enum Actions
     {
-        View,
         Create,
         Edit,
         Delete

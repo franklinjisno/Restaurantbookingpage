@@ -6,9 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BookingClass
+namespace Restaurantbookingpage
+
 {
-    public class BookingDBHandle
+    public class BookingDataBase
     {
         private SqlConnection con;
         private void connection()
@@ -19,7 +20,7 @@ namespace BookingClass
         }
 
         // **************** ADD NEW Booking *********************
-        public bool AddBooking(Bookingmodel smodel)
+        public bool AddBooking(Booking smodel)
         {
             connection();
             SqlCommand cmd = new SqlCommand("AddNewBooking", con);
@@ -42,10 +43,10 @@ namespace BookingClass
 
         // ********** VIEW Booking DETAILS ********************
 
-        public List<Bookingmodel> GetBooking(int pageIndex, int pageSize, string searchValue)
+        public List<Booking> GetBooking(int pageIndex, int pageSize, string searchValue)
         {
             connection();
-            List<Bookingmodel> bookingList = new List<Bookingmodel>();
+            List<Booking> bookingList = new List<Booking>();
 
                 SqlCommand cmd = new SqlCommand("GetBookings", con);
                 cmd.CommandType = CommandType.StoredProcedure;
@@ -64,7 +65,7 @@ namespace BookingClass
                 foreach (DataRow dr in dt.Rows)
                 {
                     bookingList.Add(
-                        new Bookingmodel
+                        new Booking
                         {
                             Id = Convert.ToInt32(dr["Id"]),
                             Customer_Name = Convert.ToString(dr["Customer_Name"]),
@@ -80,10 +81,10 @@ namespace BookingClass
                 }
             return bookingList;
         }
-        public List<Bookingmodel> GetBookings()
+        public List<Booking> GetBookings()
         {
             connection();
-            List<Bookingmodel> Bookinglist = new List<Bookingmodel>();
+            List<Booking> Bookinglist = new List<Booking>();
 
             SqlCommand cmd = new SqlCommand("GetBookingDetails", con);
             cmd.CommandType = CommandType.StoredProcedure;
@@ -97,7 +98,7 @@ namespace BookingClass
             foreach (DataRow dr in dt.Rows)
             {
                 Bookinglist.Add(
-                    new Bookingmodel
+                    new Booking
                     {
                         Id = Convert.ToInt32(dr["Id"]),
                         Customer_Name = Convert.ToString(dr["Customer_Name"]),
@@ -110,10 +111,10 @@ namespace BookingClass
         }
 
         // ***************** UPDATE Booking DETAILS *********************
-        public List<Bookingmodel> GetById(int id)
+        public List<Booking> GetById(int id)
         {
             connection();
-            List<Bookingmodel> bookinglist = new List<Bookingmodel>();
+            List<Booking> bookinglist = new List<Booking>();
             SqlCommand cmd = new SqlCommand("GetBookingById", con);
             cmd.CommandType = CommandType.StoredProcedure;
             cmd.Parameters.AddWithValue("@Id", id);
@@ -127,7 +128,7 @@ namespace BookingClass
                 foreach (DataRow dr in dt.Rows)
                 {
                     bookinglist.Add(
-                        new Bookingmodel
+                        new Booking
                         {
                             Id = Convert.ToInt32(dr["Id"]),
                             Customer_Name = Convert.ToString(dr["Customer_Name"]),
@@ -139,7 +140,7 @@ namespace BookingClass
             }
             return bookinglist;
         }
-        public bool UpdateDetails(Bookingmodel smodel)
+        public bool UpdateDetails(Booking smodel)
         {
             connection();
             SqlCommand cmd = new SqlCommand("UpdateBookingDetails", con);

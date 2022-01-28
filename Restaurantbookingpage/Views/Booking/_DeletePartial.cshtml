@@ -1,4 +1,8 @@
-﻿@model BookingClass.Bookingmodel
+﻿@model Restaurantbookingpage.Booking
+@using BookingClass.Enum;
+@{
+
+}
 <form name="bookingdeleteForm">
     <div class="modal-header">
         <h4 class="modal-title">
@@ -14,7 +18,7 @@
                     <h5><b>Customer Name</b></h5>
                     <div class="col-md-auto">
                         @Html.DisplayFor(model => model.Customer_Name, new { htmlAttributes = new { @class = "form-control" } })
-                        
+
                     </div>
                 </div>
 
@@ -46,3 +50,4 @@
         <button type="button" onclick="Deletebooking()" class="btn btn-sm btn-success pull-right">Delete</button>
     </div>
 </form>
+

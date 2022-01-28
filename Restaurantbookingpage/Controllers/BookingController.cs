@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using BookingClass;
+using BookingClass.Enum;
 
 namespace Restaurantbookingpage.Controllers
 {
@@ -19,11 +19,11 @@ namespace Restaurantbookingpage.Controllers
         {
             try
             {
-                BookingDBHandle dbhandle = new BookingDBHandle();
+                BookingDataBase dbhandle = new BookingDataBase();
                 var length = Convert.ToInt32(Request.Form["length"]);
                 var start = Convert.ToInt32(Request.Form["start"]);
                 var searchValue = Request.Form["search[value]"];
-                List<Bookingmodel> bookings = dbhandle.GetBooking(start, length, searchValue);
+                List<Booking> bookings = dbhandle.GetBooking(start, length, searchValue);
                 return Json(new { data = bookings }, JsonRequestBehavior.AllowGet);
             }
             catch
@@ -34,26 +34,36 @@ namespace Restaurantbookingpage.Controllers
         
         // Add new booking
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Create(string operation)
         {
-            Bookingmodel model = new Bookingmodel();
-            return PartialView("_Createpartial", model);
+            Booking model = new Booking();
+            if (operation == Actions.Create.ToString())
+            {
+                model.Actions = Actions.Create;
+            }
+            return PartialView("_OperationPartial", model);
         }
 
         // Edit Booking
-        public ActionResult Edit(int id)
+        public ActionResult View(string operation, int id)
         {
-            BookingDBHandle db = new BookingDBHandle();
-            var model = db.GetById(id).Find(smodel => smodel.Id == id);
-            TempData["Example"] = model.Dinning_Type;
-            return PartialView("_Createpartial", model);
+            BookingDataBase db = new BookingDataBase();
+            Booking model = db.GetById(id).Find(smodel => smodel.Id == id);
+            if(operation == Actions.Edit.ToString())
+            {
+                model.Actions = Actions.Edit;
+            }
+            return PartialView("_OperationPartial", model);
         }
 
         [HttpPost]
-        public ActionResult CreateEdit(Bookingmodel smodel)
+        [ValidateAntiForgeryToken]
+        public ActionResult CreateEdit(Booking smodel)
         {
-            BookingDBHandle sdb = new BookingDBHandle();
-                if(smodel.Id >0)
+            BookingDataBase sdb = new BookingDataBase();
+            if (ModelState.IsValid)
+            {
+                if (smodel.Id > 0)
                 {
                     sdb.UpdateDetails(smodel);
                     return Json(true, JsonRequestBehavior.AllowGet);
@@ -63,20 +73,26 @@ namespace Restaurantbookingpage.Controllers
                     sdb.UpdateDetails(smodel);
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
+            }
+            return Json(false, JsonRequestBehavior.AllowGet);
         }
 
         // Delete Booking
-        public ActionResult DeletePartial(int id)
+        public ActionResult DeletePartial(string operation, int id)
         {
-            BookingDBHandle db = new BookingDBHandle();
-            var model = db.GetById(id).Find(smodel => smodel.Id == id);
+            BookingDataBase db = new BookingDataBase();
+            Booking model = db.GetById(id).Find(smodel => smodel.Id == id);
+            if (operation == Actions.Delete.ToString())
+            {
+                model.Actions = Actions.Delete;
+            }
             return PartialView("_DeletePartial", model);
         }
         public ActionResult Delete(int id)
         {
             try
             {
-                BookingDBHandle db = new BookingDBHandle();
+                BookingDataBase db = new BookingDataBase();
                 if (db.DeleteBooking(id))
                 {
                     ViewBag.AlertMsg = "Booking Deleted Successfully";

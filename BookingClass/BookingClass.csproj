@@ -48,10 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BookingDBHandle.cs" />
-    <Compile Include="Bookinglist.cs" />
-    <Compile Include="Bookingmodel.cs" />
-    <Compile Include="Enum\Action.cs" />
+    <Compile Include="Enum\Actions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

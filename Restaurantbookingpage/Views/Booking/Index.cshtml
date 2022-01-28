@@ -90,7 +90,7 @@
     });
 
     function createbooking() {
-        $.get("/Booking/Create", function (res) {
+        $.get("/Booking/Create", { operation: "Create" }, function (res) {
             $("#bookingmodalbody").html(res);
             $("#bookingmodal").modal('show');
             $('#editclick').prop('disabled', 'true');
@@ -115,21 +115,15 @@
     }
 
     function getDetails(id) {
-        $.get("/Booking/Edit", { id: id }, function (res) {
+        $.get("/Booking/View", { operation: "Edit" , id: id }, function (res) {
             $('#bookingmodalbody').html(res);
             $('#bookingmodal').modal('show');
             $('#saveclick').prop('disabled', 'true');
-            $('#Customer_Name').prop('disabled', 'true');
-            $('#Datetime').prop('disabled', 'true');
-            $('#Dinning_Type').prop('disabled', 'true');
-            $('#NumberofGuest').prop('disabled', 'true');
-            $('Dinning_Type').val(res.Dinning_Type);
-            console.log(res);
         })
     }
 
     function getDelete(id) {
-        $.get("/Booking/DeletePartial", { id: id }, function (res) {
+        $.get("/Booking/DeletePartial", { operation: "Delete" , id: id }, function (res) {
             $('#bookingmodalbody').html(res);
             $('#bookingmodal').modal('show');
         })
