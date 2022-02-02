@@ -71,7 +71,9 @@ namespace Restaurantbookingpage
                             Customer_Name = Convert.ToString(dr["Customer_Name"]),
                             Datetime = Convert.ToDateTime(dr["Datetime"]),
                             Dinning_Type = Convert.ToString(dr["Dinning_Type"]),
-                            NumberofGuest = Convert.ToInt32(dr["NumberofGuest"])
+                            NumberofGuest = Convert.ToInt32(dr["NumberofGuest"]),
+                            Contact = Convert.ToString(dr["Contact"]),
+                            Category = Convert.ToString(dr["Category"])
                         });
                 }
             }
@@ -134,7 +136,9 @@ namespace Restaurantbookingpage
                             Customer_Name = Convert.ToString(dr["Customer_Name"]),
                             Datetime = Convert.ToDateTime(dr["Datetime"]),
                             Dinning_Type = Convert.ToString(dr["Dinning_Type"]),
-                            NumberofGuest = Convert.ToInt32(dr["NumberofGuest"])
+                            NumberofGuest = Convert.ToInt32(dr["NumberofGuest"]),
+                            Contact = Convert.ToString(dr["Contact"]),
+                            Category = Convert.ToString(dr["Category"])
                         });
                 }
             }
@@ -151,6 +155,8 @@ namespace Restaurantbookingpage
             cmd.Parameters.AddWithValue("@Datetime", smodel.Datetime);
             cmd.Parameters.AddWithValue("@Dinning_Type", smodel.Dinning_Type);
             cmd.Parameters.AddWithValue("@NumberofGuest", smodel.NumberofGuest);
+            cmd.Parameters.AddWithValue("@Contact", smodel.Contact);
+            cmd.Parameters.AddWithValue("@Category", smodel.Category);
 
             con.Open();
             int i = cmd.ExecuteNonQuery();

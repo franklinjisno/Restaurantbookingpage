@@ -2,11 +2,11 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Restaurant Booking</h2>
+<h2 style="text-align:center"><b>Restaurant Booking</b></h2>
 
-<p><button type="button" class="btn btn-info btn-lg" onclick="createbooking()">Create New</button></p>
+<p><button type="button" class="btn btn-info btn-check" onclick="createbooking()">Create New</button></p>
 
-<table class="ui celled table border-0" id="BookingTable">
+<table class="table table-borderless" style="text-align:center" id="BookingTable">
     <thead>
         <tr class="headercolour">
             <th>
@@ -20,6 +20,12 @@
             </th>
             <th>
                 Number of Guest
+            </th>
+            <th>
+                Contact
+            </th>
+            <th>
+                Category
             </th>
             <th>Action</th>
         </tr>
@@ -59,7 +65,8 @@
                 "order": [0, "asc"],
                 "columnDefs": [
                     { "targets": [1], orderable: false },
-                    { "targets": [4], orderable: false }
+                    { "targets": [4], orderable: false },
+                    { "targets": [6], orderable: false }
                 ],
 
                 "ajax": {
@@ -91,6 +98,10 @@
                     { "data": "Dinning_Type" },
 
                     { "data": "NumberofGuest" },
+
+                    { "data": "Contact" },
+
+                    { "data": "Category" },
 
                     {
                         "data": "Id",

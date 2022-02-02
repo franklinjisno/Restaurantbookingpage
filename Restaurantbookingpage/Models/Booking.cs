@@ -28,7 +28,8 @@ namespace Restaurantbookingpage
         [Required(ErrorMessage = "Number of guests is required.")]
         [Range(0, 100, ErrorMessage = "Not Valid")]
         public int NumberofGuest { get; set; }
-        public int Contact { get; set; }
+        public string Contact { get; set; }
+        public string Category { get; set; }
         public Actions Actions { get; set; }
     }
 }

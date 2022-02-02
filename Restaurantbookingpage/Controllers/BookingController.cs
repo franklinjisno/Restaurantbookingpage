@@ -54,7 +54,8 @@ namespace Restaurantbookingpage.Controllers
             Bookingdbhandle objdbhandle = new Bookingdbhandle();
             Booking objbooking = objdbhandle.GetById(id).Find(obj => obj.Id == id);
             TempData["Dinning Type"] = objbooking.Dinning_Type;
-            if(operation == Actions.View.ToString())
+            TempData["Category"] = objbooking.Category;
+            if (operation == Actions.View.ToString())
             {
                 objbooking.Actions = Actions.View;
             }
@@ -66,6 +67,7 @@ namespace Restaurantbookingpage.Controllers
             Bookingdbhandle objdbhandle = new Bookingdbhandle();
             Booking objbooking = objdbhandle.GetById(id).Find(obj => obj.Id == id);
             TempData["Dinning Type"] = objbooking.Dinning_Type;
+            TempData["Category"] = objbooking.Category;
             if (operation == Actions.Edit.ToString())
             {
                 objbooking.Actions = Actions.Edit;

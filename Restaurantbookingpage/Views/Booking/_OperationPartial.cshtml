@@ -20,7 +20,7 @@
                 <div class="form-group" style="padding-left: 20px">
                     <h5><b>Customer Name</b></h5>
                     <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        @Html.EditorFor(model => model.Customer_Name, new { htmlAttributes = new { @Id = "Customer_Name", @class = "form-control", @minlength =4, @maxlength=30 } })
+                        @Html.EditorFor(model => model.Customer_Name, new { htmlAttributes = new { @Id = "Customer_Name", @class = "form-control", @minlength = 4, @maxlength = 30 } })
                         @Html.ValidationMessageFor(model => model.Customer_Name, "", new { @class = "text-danger" })
                     </div>
                 </div>
@@ -37,8 +37,10 @@
                     <h5><b>Dinning Type</b></h5>
                     <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
                         <select class="form-control" name="Dinning_Type" id="Dinning_Type">
-                            @if(TempData["Dinning Type"] != null){
-                                <option value=@TempData["Dinning Type"]>@TempData["Dinning Type"]</option>}
+                            @if (TempData["Dinning Type"] != null)
+                            {
+                                <option value=@TempData["Dinning Type"]>@TempData["Dinning Type"]</option>
+                            }
                             <option value="Indoor">Indoor</option>
                             <option value="Outdoor">Outdoor</option>
                             <option value="Terrace">Terrace</option>
@@ -49,10 +51,34 @@
                 <div class="form-group" style="padding-left: 20px">
                     <h5><b>Number of Guests</b></h5>
                     <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        @Html.EditorFor(model => model.NumberofGuest, new { htmlAttributes = new { @Id = "NumberofGuest", @class = "form-control", @min= 0, @max=100 } })
+                        @Html.EditorFor(model => model.NumberofGuest, new { htmlAttributes = new { @Id = "NumberofGuest", @class = "form-control", @min = 0, @max = 100 } })
                         @Html.ValidationMessageFor(model => model.NumberofGuest, "", new { @class = "text-danger" })
                     </div>
                 </div>
+
+                <div class="form-group" style="padding-left: 20px">
+                    <h5><b>Contact</b></h5>
+                    <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
+                        @Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @Id = "Contact", @class = "form-control", @minlength = 10, @maxlength = 10 } })
+                        @Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group" style="padding-left: 20px">
+                    <h5><b>Category</b></h5>
+                    <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
+                        <select class="form-control" name="Category" id="Category">
+                            @if (TempData["Category"] != null)
+                            {
+                                <option value=@TempData["Category"]>@TempData["Category"]</option>
+                            }
+                            <option value="Vegetarian">Vegetarian</option>
+                            <option value="Non-Vegetarian">Non-Vegetarian</option>
+                            <option value="Vegan">Vegan</option>
+                        </select>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
