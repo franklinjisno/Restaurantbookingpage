@@ -10,6 +10,7 @@ namespace BookingClass.Enum
     {
         Create,
         Edit,
-        Delete
+        Delete,
+        View
     }
 }

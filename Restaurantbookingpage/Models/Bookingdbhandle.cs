@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Restaurantbookingpage
 
 {
-    public class BookingDataBase
+    public class Bookingdbhandle
     {
         private SqlConnection con;
         private void connection()

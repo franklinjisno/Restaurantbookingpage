@@ -27,9 +27,18 @@
 
 </table>
 
-<div class="modal fade" id="bookingmodal" role="dialog">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" id="bookingmodalbody">
+<div class="modal fade" id="bookingmodal" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document" style="padding-left:50px">
+        <div class="modal-content" id="bookingmodalbody" style="width: 90%">
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="bookingmodal1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document" style="padding-left:160px">
+        <div class="modal-content" id="bookingmodalbody1" style="width: 60%">
 
         </div>
 
@@ -47,18 +56,23 @@
                 "serverSide": true,
                 "filter": true,
                 "bInfo": false,
+                "order": [0, "asc"],
+                "columnDefs": [
+                    { "targets": [1], orderable: false },
+                    { "targets": [4], orderable: false }
+                ],
 
                 "ajax": {
 
-                    "url": "/Booking/BookingData",
+                    url: "/Booking/BookingData",
 
-                    "type": "Post",
+                    type: "POST",
 
-                    "datatype": "json"
+                    datatype: "json"
 
                 },
 
-                "columns": [
+                columns: [
 
                     { "data": "Customer_Name" },
 
@@ -81,10 +95,11 @@
                     {
                         "data": "Id",
                         "render": function (booking) {
-                            return ('<button id="viewclick" class"btn btn-success" onclick="getDetails(' + booking + ')">View</button> <button class"btn btn-success" onclick="getDelete(' + booking + ')">Delete</button> ');
+                            return ('<button id="viewclick" class"btn btn-success" onclick="getDetails(' + booking + ')">View</button> <button id="editclicks" class"btn btn-success" onclick="getEditDetails(' + booking + ')">Edit</button> <button class"btn btn-success" onclick="getDelete(' + booking + ')">Delete</button>');
                         }
 
                     }]
+                
            
             });
     });
@@ -107,6 +122,13 @@
             var data = form.serialize();
             $.post("/Booking/CreateEdit", data, function (res) {
                 if (res) {
+                    Swal.fire({
+                        position: 'top-centre',
+                        icon: 'success',
+                        title: 'Booking saved',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
                     modal.modal('hide');
                     dataTable.ajax.reload();
                 }
@@ -115,23 +137,30 @@
     }
 
     function getDetails(id) {
-        $.get("/Booking/View", { operation: "Edit" , id: id }, function (res) {
+        $.get("/Booking/View", { operation: "View" , id: id }, function (res) {
             $('#bookingmodalbody').html(res);
             $('#bookingmodal').modal('show');
             $('#saveclick').prop('disabled', 'true');
         })
     }
 
-    function getDelete(id) {
-        $.get("/Booking/DeletePartial", { operation: "Delete" , id: id }, function (res) {
+    function getEditDetails(id) {
+        $.get("/Booking/Edit", { operation: "Edit", id: id }, function (res) {
             $('#bookingmodalbody').html(res);
             $('#bookingmodal').modal('show');
+            $('#editclick').prop('disabled', 'true');
+        })
+    }
+
+    function getDelete(id) {
+        $.get("/Booking/DeletePartial", { operation: "Delete" , id: id }, function (res) {
+            $('#bookingmodalbody1').html(res);
+            $('#bookingmodal1').modal('show');
         })
     }
 
     function Deletebooking(id) {
-        if (confirm("Confirm Delete?") == true) {
-            var modal = $("#bookingmodal");
+            var modal = $("#bookingmodal1");
             var form = $('form[name="bookingdeleteForm"]');
             form.validate();
             if (!form.valid()) {
@@ -140,11 +169,17 @@
                 var data = form.serialize();
                 $.post("/Booking/Delete", data, function (res) {
                     if (res) {
+                        Swal.fire({
+                            position: 'top-centre',
+                            icon: 'success',
+                            title: 'Booking Deleted',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
                         modal.modal('hide');
                         dataTable.ajax.reload();
                     }
                 })
             }
-        }
     }
 </script>
