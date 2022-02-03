@@ -20,20 +20,20 @@
                 <div class="form-group" style="padding-left: 20px">
                     <h5><b>Customer Name</b></h5>
                     <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        @Html.EditorFor(model => model.Customer_Name, new { htmlAttributes = new { @Id = "Customer_Name", @class = "form-control", @minlength = 4, @maxlength = 30 } })
-                        @Html.ValidationMessageFor(model => model.Customer_Name, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Customer_Name, new { htmlAttributes = new { @Id = "Customer_Name", @class = "form-control", @onkeyup="nameValidation()" } })
+                        <small style="position:absolute">@Html.ValidationMessageFor(model => model.Customer_Name, "", new { @class = "text-danger", @Id = "nameValidation" })</small>
                     </div>
                 </div>
 
-                <div class="form-group" style="padding-left: 20px">
+                <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
                     <h5><b>Date Time</b></h5>
                     <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        @Html.EditorFor(model => model.Datetime, new { htmlAttributes = new { @type = "date", @id = "Datetime", @Value = Model.Datetime.ToString("yyyy/MM/dd"), @min = "2022-02-01", @class = "form-control" } })
-                        @Html.ValidationMessageFor(model => model.Datetime, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Datetime, new { htmlAttributes = new { @type = "date", @id = "Datetime", @Value = Model.Datetime.ToString("yyyy/MM/dd"), @class = "form-control" } })
+                        <small style="position:absolute">@Html.ValidationMessageFor(model => model.Datetime, "", new { @class = "text-danger", @Id = "dateValidation" })</small>
                     </div>
                 </div>
 
-                <div class="form-group" style="padding-left: 20px">
+                <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
                     <h5><b>Dinning Type</b></h5>
                     <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
                         <select class="form-control" name="Dinning_Type" id="Dinning_Type">
@@ -48,23 +48,23 @@
                     </div>
                 </div>
 
-                <div class="form-group" style="padding-left: 20px">
+                <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
                     <h5><b>Number of Guests</b></h5>
                     <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        @Html.EditorFor(model => model.NumberofGuest, new { htmlAttributes = new { @Id = "NumberofGuest", @class = "form-control", @min = 0, @max = 100 } })
-                        @Html.ValidationMessageFor(model => model.NumberofGuest, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.NumberofGuest, new { htmlAttributes = new { @Id = "NumberofGuest", @class = "form-control", @onkeyup = "numberofguestValidation()" } })
+                        <small style="position:absolute">@Html.ValidationMessageFor(model => model.NumberofGuest, "", new { @class = "text-danger", @Id = "numberofguestValidation" })</small>
                     </div>
                 </div>
 
-                <div class="form-group" style="padding-left: 20px">
+                <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
                     <h5><b>Contact</b></h5>
                     <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        @Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @Id = "Contact", @class = "form-control", @minlength = 10, @maxlength = 10 } })
-                        @Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger" })
+                        @Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @Id = "Contact", @class = "form-control", @onkeyup = "contactValidation()" } })
+                        <small style="position:absolute">@Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger", @Id = "contactValidation" })</small>
                     </div>
                 </div>
 
-                <div class="form-group" style="padding-left: 20px">
+                <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
                     <h5><b>Category</b></h5>
                     <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
                         <select class="form-control" name="Category" id="Category">
@@ -94,12 +94,15 @@
         var operation = '@Model.Actions.ToString()';
         if (operation == '@Actions.View') {
             $('.form-control').attr('disabled', true);
+            $('#saveclick').prop('disabled', 'true');
         }
         if (operation == '@Actions.Create') {
             $('.form-control').attr('disabled', false);
+            $('#editclick').prop('disabled', 'true');
         }
          if (operation == '@Actions.Edit') {
-            $('.form-control').attr('disabled', false);
+             $('.form-control').attr('disabled', false);
+             $('#editclick').prop('disabled', 'true');
         }
     });
 

@@ -41,14 +41,22 @@ namespace Restaurantbookingpage.Controllers
         public ActionResult Create(string operation)
         {
             Booking objbooking = new Booking();
-            if (operation == Actions.Create.ToString())
+            if (ModelState.IsValid)
             {
-                objbooking.Actions = Actions.Create;
+                if (operation == Actions.Create.ToString())
+                {
+                    objbooking.Actions = Actions.Create;
+                }
+                return PartialView("_OperationPartial", objbooking);
             }
-            return PartialView("_OperationPartial", objbooking);
+            else
+            {
+                return View();
+            }
         }
 
-        // Edit Booking
+        // View Booking
+        [HttpGet]
         public ActionResult View(string operation, int id)
         {
             Bookingdbhandle objdbhandle = new Bookingdbhandle();
@@ -62,17 +70,28 @@ namespace Restaurantbookingpage.Controllers
             return PartialView("_OperationPartial", objbooking);
         }
 
+        // Edit Booking
+        [HttpGet]
         public ActionResult Edit(string operation, int id)
         {
             Bookingdbhandle objdbhandle = new Bookingdbhandle();
-            Booking objbooking = objdbhandle.GetById(id).Find(obj => obj.Id == id);
-            TempData["Dinning Type"] = objbooking.Dinning_Type;
-            TempData["Category"] = objbooking.Category;
-            if (operation == Actions.Edit.ToString())
+            if (ModelState.IsValid)
             {
-                objbooking.Actions = Actions.Edit;
+                Booking objbooking = objdbhandle.GetById(id).Find(obj => obj.Id == id);
+                objbooking.Customer_Name = objbooking.Customer_Name.Trim();
+                objbooking.Contact = objbooking.Contact.Trim();
+                TempData["Dinning Type"] = objbooking.Dinning_Type;
+                TempData["Category"] = objbooking.Category;
+                if (operation == Actions.Edit.ToString())
+                {
+                    objbooking.Actions = Actions.Edit;
+                }
+                return PartialView("_OperationPartial", objbooking);
             }
-            return PartialView("_OperationPartial", objbooking);
+            else
+            {
+                return View();
+            }
         }
 
         [HttpPost]

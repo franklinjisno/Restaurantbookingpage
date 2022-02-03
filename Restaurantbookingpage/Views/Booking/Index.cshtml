@@ -9,25 +9,25 @@
 <table class="table table-borderless" style="text-align:center" id="BookingTable">
     <thead>
         <tr class="headercolour">
-            <th>
+            <th style="text-align:center">
                 Cutomer Name
             </th>
-            <th>
+            <th style="text-align:center">
                 Date of Booking
             </th>
-            <th>
+            <th style="text-align:center">
                 Dinning Type
             </th>
-            <th>
+            <th style="text-align:center">
                 Number of Guest
             </th>
-            <th>
+            <th style="text-align:center">
                 Contact
             </th>
-            <th>
+            <th style="text-align:center">
                 Category
             </th>
-            <th>Action</th>
+            <th style="text-align:center">Action</th>
         </tr>
     </thead>
 
@@ -68,6 +68,7 @@
                     { "targets": [4], orderable: false },
                     { "targets": [6], orderable: false }
                 ],
+                
 
                 "ajax": {
 
@@ -119,13 +120,16 @@
         $.get("/Booking/Create", { operation: "Create" }, function (res) {
             $("#bookingmodalbody").html(res);
             $("#bookingmodal").modal('show');
-            $('#editclick').prop('disabled', 'true');
         })
     }
 
     function Savebooking() {
         var modal = $("#bookingmodal");
         var form = $('form[name="bookingForm"]');
+        nameValidation();
+        dateValidation();
+        numberofguestValidation();
+        contactValidation();
         form.validate();
         if (!form.valid()) {
             return;
@@ -147,11 +151,70 @@
         }
     }
 
+    function nameValidation() {
+        var letters = /^[A-Z a-z]+$/;
+        if (!$("#Customer_Name").val().match(letters) && $("#Customer_Name").val() != "") {
+            $("#nameValidation").html("Please Provide Valid Name");
+        }
+        else if ($("#Customer_Name").val() == "") {
+            $("#nameValidation").html("Customer Name is Required");
+        }
+        else if ($("#Customer_Name").val().length >= 20) {
+            $("#nameValidation").html("Name must contain only 20 characters");
+        }
+        else if ($("#Customer_Name").val().length <= 2) {
+            $("#nameValidation").html("Please Provide Valid Name");
+        }
+        else {
+            $("#nameValidation").html("");
+        }
+    }
+
+    function dateValidation() {
+        if ($("#Datetime").val() <= "03-02-2022") {
+            $("#dateValidation").html("Bookings only from today's Date");
+        }
+        else {
+            $("#dateValidation").html("");
+        }
+    }
+
+    function numberofguestValidation() {
+        if ($("#NumberofGuest").val() == 0) {
+            $("#numberofguestValidation").html("Number of Guests Required");
+        }
+        else if ($("#NumberofGuest").val() >= 100) {
+            $("#numberofguestValidation").html("Maximum number of guests is 99");
+        }
+        else {
+            $("#numberofguestValidation").html("");
+        }
+    }
+
+    function contactValidation() {
+        var expression = /^[0-9]+$/;
+        if (!$("#Contact").val().match(expression) && $("#Contact").val() != "") {
+            $("#contactValidation").html("Please Provide Valid Contact Number");
+        }
+        else if ($("#Contact").val() == "") {
+            $("#contactValidation").html("Contact Number is Required");
+        }
+        else if ($("#Contact").val().length >= 11) {
+            $("#contactValidation").html("Contact must contain only 10 characters");
+        }
+        else if ($("#Contact").val().length <= 9) {
+            $("#contactValidation").html("Contact Number Not Valid");
+        }
+        else {
+            $("#contactValidation").html("");
+        }
+    }
+
     function getDetails(id) {
         $.get("/Booking/View", { operation: "View" , id: id }, function (res) {
             $('#bookingmodalbody').html(res);
             $('#bookingmodal').modal('show');
-            $('#saveclick').prop('disabled', 'true');
+            
         })
     }
 
@@ -159,7 +222,7 @@
         $.get("/Booking/Edit", { operation: "Edit", id: id }, function (res) {
             $('#bookingmodalbody').html(res);
             $('#bookingmodal').modal('show');
-            $('#editclick').prop('disabled', 'true');
+            
         })
     }
 
