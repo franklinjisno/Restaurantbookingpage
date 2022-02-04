@@ -28,7 +28,7 @@
                 <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
                     <h5><b>Date Time</b></h5>
                     <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        @Html.EditorFor(model => model.Datetime, new { htmlAttributes = new { @type = "date", @id = "Datetime", @Value = Model.Datetime.ToString("yyyy/MM/dd"), @class = "form-control" } })
+                        @Html.EditorFor(model => model.Datetime, new { htmlAttributes = new { @type = "date", @id = "Datetime", @Value = Model.Datetime.ToString("yyyy/MM/dd"), @min = "2022-02-04", @class = "form-control" } })
                         <small style="position:absolute">@Html.ValidationMessageFor(model => model.Datetime, "", new { @class = "text-danger", @Id = "dateValidation" })</small>
                     </div>
                 </div>
@@ -41,10 +41,10 @@
                             {
                                 <option value=@TempData["Dinning Type"]>@TempData["Dinning Type"]</option>
                             }
-                            <option value="Indoor">Indoor</option>
-                            <option value="Outdoor">Outdoor</option>
-                            <option value="Terrace">Terrace</option>
-                        </select>
+                                                <option value="Indoor">Indoor</option>
+                                                <option value="Outdoor">Outdoor</option>
+                                                <option value="Terrace">Terrace</option>
+                                            </select>
                     </div>
                 </div>
 
@@ -95,15 +95,34 @@
         if (operation == '@Actions.View') {
             $('.form-control').attr('disabled', true);
             $('#saveclick').prop('disabled', 'true');
+
         }
         if (operation == '@Actions.Create') {
             $('.form-control').attr('disabled', false);
             $('#editclick').prop('disabled', 'true');
+            var todaydate = '@DateTime.Today.ToString("yyyy/MM/dd")';
+            $("#Datetime").val(todaydate);
+
         }
          if (operation == '@Actions.Edit') {
              $('.form-control').attr('disabled', false);
              $('#editclick').prop('disabled', 'true');
+             //$('#Dinning').val('@Model.Dinning_Type');
+             //$('#Category').val('@Model.Category');
         }
+        $(function () {
+            $('#Datetime').keypress(function (res) {
+                res.preventDefault();
+                return false;
+            });
+        });
+    });
+
+    $("#Dinning_Type").change(function () {
+        var stud = $("#Dinning_Type").val();
+        $("#Dinning_Type").val(stud);
+
+
     });
 
     function enableedit() {
@@ -111,6 +130,7 @@
         document.getElementById("saveclick").disabled = false;
         document.getElementById("editclick").disabled = true;
     }
+
 
 </script>
 

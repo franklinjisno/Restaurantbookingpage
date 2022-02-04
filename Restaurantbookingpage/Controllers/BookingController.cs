@@ -28,7 +28,8 @@ namespace Restaurantbookingpage.Controllers
                 string sortDirection = Request["order[0][dir]"];
                 List<Booking> objbooking = objdbhandle.GetBooking(start, length, searchValue);
                 objbooking = objbooking.OrderBy(sortColumnName + " " + sortDirection).ToList<Booking>();
-                return Json(new { data = objbooking }, JsonRequestBehavior.AllowGet);
+                int totalCount = objdbhandle.GetCount();
+                return Json(new { data = objbooking, recordsTotal = totalCount, recordsFiltered = totalCount }, JsonRequestBehavior.AllowGet);
             }
             catch
             {
@@ -63,6 +64,8 @@ namespace Restaurantbookingpage.Controllers
             Booking objbooking = objdbhandle.GetById(id).Find(obj => obj.Id == id);
             TempData["Dinning Type"] = objbooking.Dinning_Type;
             TempData["Category"] = objbooking.Category;
+            objbooking.Customer_Name = objbooking.Customer_Name.Trim();
+            objbooking.Contact = objbooking.Contact.Trim();
             if (operation == Actions.View.ToString())
             {
                 objbooking.Actions = Actions.View;
@@ -75,23 +78,16 @@ namespace Restaurantbookingpage.Controllers
         public ActionResult Edit(string operation, int id)
         {
             Bookingdbhandle objdbhandle = new Bookingdbhandle();
-            if (ModelState.IsValid)
-            {
-                Booking objbooking = objdbhandle.GetById(id).Find(obj => obj.Id == id);
-                objbooking.Customer_Name = objbooking.Customer_Name.Trim();
+            Booking objbooking = objdbhandle.GetById(id).Find(obj => obj.Id == id);
+            TempData["Dinning Type"] = objbooking.Dinning_Type;
+            TempData["Category"] = objbooking.Category;
+            objbooking.Customer_Name = objbooking.Customer_Name.Trim();
                 objbooking.Contact = objbooking.Contact.Trim();
-                TempData["Dinning Type"] = objbooking.Dinning_Type;
-                TempData["Category"] = objbooking.Category;
                 if (operation == Actions.Edit.ToString())
                 {
                     objbooking.Actions = Actions.Edit;
                 }
                 return PartialView("_OperationPartial", objbooking);
-            }
-            else
-            {
-                return View();
-            }
         }
 
         [HttpPost]

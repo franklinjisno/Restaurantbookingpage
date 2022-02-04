@@ -61,7 +61,7 @@
                 "processing": true,
                 "serverSide": true,
                 "filter": true,
-                "bInfo": false,
+                "bInfo": true,
                 "order": [0, "asc"],
                 "columnDefs": [
                     { "targets": [1], orderable: false },
@@ -121,13 +121,13 @@
             $("#bookingmodalbody").html(res);
             $("#bookingmodal").modal('show');
         })
+        
     }
 
     function Savebooking() {
         var modal = $("#bookingmodal");
         var form = $('form[name="bookingForm"]');
         nameValidation();
-        dateValidation();
         numberofguestValidation();
         contactValidation();
         form.validate();
@@ -170,21 +170,15 @@
         }
     }
 
-    function dateValidation() {
-        if ($("#Datetime").val() <= "03-02-2022") {
-            $("#dateValidation").html("Bookings only from today's Date");
-        }
-        else {
-            $("#dateValidation").html("");
-        }
-    }
-
     function numberofguestValidation() {
         if ($("#NumberofGuest").val() == 0) {
             $("#numberofguestValidation").html("Number of Guests Required");
         }
         else if ($("#NumberofGuest").val() >= 100) {
             $("#numberofguestValidation").html("Maximum number of guests is 99");
+        }
+        else if ($("#NumberofGuest").val() <= -1) {
+            $("#numberofguestValidation").html("Minimum number of guest is 1");
         }
         else {
             $("#numberofguestValidation").html("");
