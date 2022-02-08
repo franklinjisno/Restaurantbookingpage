@@ -2,13 +2,13 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2 style="text-align:center"><b>Restaurant Booking</b></h2>
-
+    
+<br />
 <p><button type="button" class="btn btn-info btn-check" onclick="createbooking()">Create New</button></p>
-
-<table class="table table-borderless" style="text-align:center" id="BookingTable">
+<br />
+<table class="table table-bordered" style="text-align:center" id="BookingTable">
     <thead>
-        <tr class="headercolour">
+        <tr class="headercolour" style="background-color:burlywood;color:white;">
             <th style="text-align:center">
                 Cutomer Name
             </th>
@@ -27,15 +27,17 @@
             <th style="text-align:center">
                 Category
             </th>
-            <th style="text-align:center">Action</th>
+            <th style="text-align:center">
+                Action
+            </th>
         </tr>
     </thead>
 
 </table>
 
 <div class="modal fade" id="bookingmodal" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document" style="padding-left:50px">
-        <div class="modal-content" id="bookingmodalbody" style="width: 90%">
+    <div class="modal-dialog" role="document" style="padding-left:50px" >
+        <div class="modal-content" id="bookingmodalbody" style="width: 90%; background-color:antiquewhite">
 
         </div>
 
@@ -43,8 +45,8 @@
 </div>
 
 <div class="modal fade" id="bookingmodal1" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document" style="padding-left:160px">
-        <div class="modal-content" id="bookingmodalbody1" style="width: 60%">
+    <div class="modal-dialog" role="document" style="padding-left:100px; padding-top:200px;">
+        <div class="modal-content" id="bookingmodalbody1" style="width: 70%; background-color: antiquewhite">
 
         </div>
 
@@ -64,8 +66,8 @@
                 "bInfo": true,
                 "order": [0, "asc"],
                 "columnDefs": [
-                    { "targets": [1], orderable: false },
-                    { "targets": [4], orderable: false },
+                    
+                    { "targets": [1,4], orderable: false },
                     { "targets": [6], orderable: false }
                 ],
                 
@@ -128,8 +130,10 @@
         var modal = $("#bookingmodal");
         var form = $('form[name="bookingForm"]');
         nameValidation();
+        dinningValidation();
         numberofguestValidation();
         contactValidation();
+        categoryValidation()
         form.validate();
         if (!form.valid()) {
             return;
@@ -145,7 +149,7 @@
                         timer: 1500
                     })
                     modal.modal('hide');
-                    dataTable.ajax.reload();
+                    dataTable.ajax.reload(null,false);
                 }
             })
         }
@@ -157,7 +161,7 @@
             $("#nameValidation").html("Please Provide Valid Name");
         }
         else if ($("#Customer_Name").val() == "") {
-            $("#nameValidation").html("Customer Name is Required");
+            $("#nameValidation").html("Customer Name Required");
         }
         else if ($("#Customer_Name").val().length >= 20) {
             $("#nameValidation").html("Name must contain only 20 characters");
@@ -167,6 +171,15 @@
         }
         else {
             $("#nameValidation").html("");
+        }
+    }
+
+    function dinningValidation() {
+        if ($("#Dinning_Type").val() == "") {
+            $("#dinningValidation").html("Dinning Type Required");
+        }
+        else {
+            $("#dinningValidation").html("");
         }
     }
 
@@ -201,6 +214,15 @@
         }
         else {
             $("#contactValidation").html("");
+        }
+    }
+
+    function categoryValidation() {
+        if ($("#Category").val() == "") {
+            $("#categoryValidation").html("Category Required");
+        }
+        else {
+            $("#categoryValidation").html("");
         }
     }
 

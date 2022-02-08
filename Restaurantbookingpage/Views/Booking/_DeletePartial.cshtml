@@ -4,7 +4,7 @@
 
 }
 <form name="bookingdeleteForm">
-    <div class="modal-header">
+    <div class="modal-header" >
         <h4 class="modal-title">
             <span><b>Delete Booking</b></span>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -15,46 +15,7 @@
         <div class="row">
             <div class="col-md-10">
                 <div class="form-group">
-                    <h5><b>Customer Name</b></h5>
-                    <div class="col-md-auto">
-                        @Html.DisplayFor(model => model.Customer_Name, new { htmlAttributes = new { @class = "form-control" } })
-
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <h5><b>Date Time</b></h5>
-                    <div class="col-md-auto">
-                        @Html.DisplayFor(model => model.Datetime, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <h5><b>Dinning Type</b></h5>
-                    <div class="col-md-auto">
-                        @Html.DisplayFor(model => model.Dinning_Type, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <h5><b>Number of Guests</b></h5>
-                    <div class="col-md-auto">
-                        @Html.DisplayFor(model => model.NumberofGuest, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <h5><b>Contact</b></h5>
-                    <div class="col-md-auto">
-                        @Html.DisplayFor(model => model.Contact, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <h5><b>Category</b></h5>
-                    <div class="col-md-auto">
-                        @Html.DisplayFor(model => model.Category, new { htmlAttributes = new { @class = "form-control" } })
-                    </div>
+                    <b>Delete the booking of  @Html.DisplayFor(model => model.Customer_Name, new { htmlAttributes = new { @class = "form-control" } }) ? </b>
                 </div>
             </div>
         </div>

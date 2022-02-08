@@ -4,7 +4,9 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>@ViewBag.Title - Restaurant Booking</title>
+
     <!--Required jQuery file-->
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -24,22 +26,31 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.11.3/datatables.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
+    <link href="~/Content/Site.css" rel="stylesheet" />
 
-    
 
 </head>
-<body style="background-color:powderblue;">
-    
+<body style="background-color:antiquewhite">
+    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color:bisque">
+        <div class="container">
 
+            <h1 style=" padding-left: 35%;color:black "><b>Restaurant Booking</b></h1>
+
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <br />
 
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer>
+        <footer style="padding-left:42%">
             <p>&copy; @DateTime.Now.Year - Restaurant Booking</p>
         </footer>
     </div>
 
-    
+
 </body>
 </html>

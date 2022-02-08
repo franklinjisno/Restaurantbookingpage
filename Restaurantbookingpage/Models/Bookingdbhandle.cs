@@ -187,12 +187,13 @@ namespace Restaurantbookingpage
                 return false;
         }
 
-        public int GetCount()
+        public int GetCount(string searchValue)
         {
             int count = 0;
             connection();
             SqlCommand cmd = new SqlCommand("GetCount", con);
             cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@searchValue", searchValue);
             SqlDataAdapter sd = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
             con.Open();

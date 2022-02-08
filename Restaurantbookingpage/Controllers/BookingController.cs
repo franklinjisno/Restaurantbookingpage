@@ -28,7 +28,7 @@ namespace Restaurantbookingpage.Controllers
                 string sortDirection = Request["order[0][dir]"];
                 List<Booking> objbooking = objdbhandle.GetBooking(start, length, searchValue);
                 objbooking = objbooking.OrderBy(sortColumnName + " " + sortDirection).ToList<Booking>();
-                int totalCount = objdbhandle.GetCount();
+                int totalCount = objdbhandle.GetCount(searchValue);
                 return Json(new { data = objbooking, recordsTotal = totalCount, recordsFiltered = totalCount }, JsonRequestBehavior.AllowGet);
             }
             catch
