@@ -3,9 +3,9 @@
 }
 
     
-<br />
-<p><button type="button" class="btn btn-info btn-check" onclick="createbooking()">Create New</button></p>
-<br />
+
+<p><button type="button" class="btn btn-info btn-check" onclick="createbooking()">Create </button></p>
+
 <table class="table table-bordered" style="text-align:center" id="BookingTable">
     <thead>
         <tr class="headercolour" style="background-color:burlywood;color:white;">
@@ -45,7 +45,7 @@
 </div>
 
 <div class="modal fade" id="bookingmodal1" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document" style="padding-left:100px; padding-top:200px;">
+    <div class="modal-dialog" role="document" style="padding-left:150px; padding-top:200px;">
         <div class="modal-content" id="bookingmodalbody1" style="width: 70%; background-color: antiquewhite">
 
         </div>
@@ -65,6 +65,7 @@
                 "filter": true,
                 "bInfo": true,
                 "order": [0, "asc"],
+                "dom": '<"top"f>rt<"bottom"lpi><"clear">',
                 "columnDefs": [
                     
                     { "targets": [1,4], orderable: false },
@@ -109,7 +110,7 @@
                     {
                         "data": "Id",
                         "render": function (booking) {
-                            return ('<button id="viewclick" class"btn btn-success" onclick="getDetails(' + booking + ')">View</button> <button id="editclicks" class"btn btn-success" onclick="getEditDetails(' + booking + ')">Edit</button> <button class"btn btn-success" onclick="getDelete(' + booking + ')">Delete</button>');
+                            return ('<button id="viewclick" class="btn btn-info" title="View" onclick="getDetails(' + booking + ')"><span class="glyphicon glyphicon-eye-open"></span></button> <button id="editclicks" class="btn btn-warning" title="Edit" onclick="getEditDetails(' + booking + ')"><span class="glyphicon glyphicon-pencil"></span></button> <button class="btn btn-danger" title="Delete" onclick="getDelete(' + booking + ')"><span class="glyphicon glyphicon-trash"></span></button>');
                         }
 
                     }]
@@ -141,13 +142,23 @@
             var data = form.serialize();
             $.post("/Booking/CreateEdit", data, function (res) {
                 if (res) {
-                    Swal.fire({
-                        position: 'top-centre',
-                        icon: 'success',
-                        title: 'Booking saved',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
+                    toastr.options = {
+                        "closeButton": true,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "200",
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr["success"]("Booking Saved")
                     modal.modal('hide');
                     dataTable.ajax.reload(null,false);
                 }
@@ -259,13 +270,23 @@
                 var data = form.serialize();
                 $.post("/Booking/Delete", data, function (res) {
                     if (res) {
-                        Swal.fire({
-                            position: 'top-centre',
-                            icon: 'success',
-                            title: 'Booking Deleted',
-                            showConfirmButton: false,
-                            timer: 1500
-                        })
+                        toastr.options = {
+                            "closeButton": true,
+                            "newestOnTop": false,
+                            "progressBar": true,
+                            "positionClass": "toast-bottom-right",
+                            "preventDuplicates": false,
+                            "onclick": null,
+                            "showDuration": "200",
+                            "hideDuration": "1000",
+                            "timeOut": "3000",
+                            "extendedTimeOut": "1000",
+                            "showEasing": "swing",
+                            "hideEasing": "linear",
+                            "showMethod": "fadeIn",
+                            "hideMethod": "fadeOut"
+                        }
+                        toastr["success"]("Booking Deleted")
                         modal.modal('hide');
                         dataTable.ajax.reload();
                     }

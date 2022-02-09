@@ -27,6 +27,8 @@
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-validate/1.19.3/jquery.validate.min.js"></script>
     <link href="~/Content/Site.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
 
 
 </head>
@@ -46,11 +48,19 @@
     <div class="container body-content">
         @RenderBody()
         <hr />
-        <footer style="padding-left:42%">
-            <p>&copy; @DateTime.Now.Year - Restaurant Booking</p>
-        </footer>
-    </div>
 
+    </div>
+    <br />
+    <br />
+    <div class="navbar navbar-fixed-bottom" style="background-color: antiquewhite">
+        <div class="container">
+
+            <footer style="padding-left:42%">
+                <p>&copy; @DateTime.Now.Year - Restaurant Booking</p>
+            </footer>
+
+        </div>
+    </div>
 
 </body>
 </html>
