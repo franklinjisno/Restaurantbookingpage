@@ -7,15 +7,18 @@ input::-webkit-inner-spin-button {
     }
 
 .dataTables_length {
-    margin-top: 10px;
-    margin-left: 0px;
+    margin-top: 7px;
+    margin-left: 20px;
 }
 
 .dataTables_info {
-    margin-top: -40px;
-    margin-left: 180px;
+    margin-top: 0px;
+    margin-left: 0px;
 }
 .dataTables_filter {
     margin-top: -40px;
+}
+.button {
+    width: 10%;
 }
 
