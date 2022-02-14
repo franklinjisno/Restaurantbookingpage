@@ -3,10 +3,10 @@
 }
 
     
-
+<br />
 <p><button type="button" class="btn btn-info btn-check" onclick="createbooking()">Create </button></p>
 
-<table class="table table-bordered" style="text-align:center" id="BookingTable">
+<table class="table table-bordered dt-responsive nowrap" style="text-align:center;overflow:hidden;" id="BookingTable">
     <thead>
         <tr class="headercolour" style="background-color:burlywood;color:white;">
             <th style="text-align:center">
@@ -63,6 +63,8 @@
                 "processing": true,
                 "serverSide": true,
                 "filter": true,
+                "scrollY": "400px",
+                "scrollCollapse": false,
                 "bInfo": true,
                 "order": [0, "asc"],
                 "dom": '<"top"f>rt<"bottom"ilp><"clear">',
@@ -111,7 +113,7 @@
                     {
                         "data": "Id",
                         "render": function (booking) {
-                            return ('<button id="viewclick" class="btn btn-info" title="View" onclick="getDetails(' + booking + ')"><span class="glyphicon glyphicon-eye-open"></span></button> <button id="editclicks" class="btn btn-warning" title="Edit" onclick="getEditDetails(' + booking + ')"><span class="glyphicon glyphicon-pencil"></span></button> <button class="btn btn-danger" title="Delete" onclick="getDelete(' + booking + ')"><span class="glyphicon glyphicon-trash"></span></button>');
+                            return ('<a class="blues" id="viewclick" title="View" onclick="getDetails(' + booking + ')"><span class="glyphicon glyphicon-eye-open"></span></a> <a class="oranges" id="editclicks" title="Edit" onclick="getEditDetails(' + booking + ')"><span class="glyphicon glyphicon-edit"></span></a> <a class="reds" title="Delete" onclick="getDelete(' + booking + ')"><span class="glyphicon glyphicon-trash"></span></a>');
                         }
 
                     }]
