@@ -49,4 +49,10 @@ input::-webkit-inner-spin-button {
 div.container {
     width: 90%;
 }
+.dt-buttons {
+    display:none;
+}
+.btns {
+   
+}
 
