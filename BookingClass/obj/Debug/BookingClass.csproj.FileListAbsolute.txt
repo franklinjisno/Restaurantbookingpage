@@ -7,3 +7,13 @@ D:\Assingnment\Restaurantbookingpage\Restaurantbookingpage\BookingClass\obj\Debu
 D:\Assingnment\Restaurantbookingpage\Restaurantbookingpage\BookingClass\obj\Debug\BookingClass.csproj.CopyComplete
 D:\Assingnment\Restaurantbookingpage\Restaurantbookingpage\BookingClass\obj\Debug\BookingClass.dll
 D:\Assingnment\Restaurantbookingpage\Restaurantbookingpage\BookingClass\obj\Debug\BookingClass.pdb
+D:\Project-Franklin\BookingClass\bin\Debug\BookingClass.dll
+D:\Project-Franklin\BookingClass\bin\Debug\BookingClass.pdb
+D:\Project-Franklin\BookingClass\bin\Debug\System.ComponentModel.Annotations.dll
+D:\Project-Franklin\BookingClass\bin\Debug\System.Data.SqlClient.dll
+D:\Project-Franklin\BookingClass\bin\Debug\System.Data.SqlClient.xml
+D:\Project-Franklin\BookingClass\obj\Debug\BookingClass.csproj.AssemblyReference.cache
+D:\Project-Franklin\BookingClass\obj\Debug\BookingClass.csproj.CoreCompileInputs.cache
+D:\Project-Franklin\BookingClass\obj\Debug\BookingClass.csproj.CopyComplete
+D:\Project-Franklin\BookingClass\obj\Debug\BookingClass.dll
+D:\Project-Franklin\BookingClass\obj\Debug\BookingClass.pdb

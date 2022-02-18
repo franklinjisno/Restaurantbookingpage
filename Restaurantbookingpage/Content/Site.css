@@ -6,6 +6,12 @@ input::-webkit-inner-spin-button {
         margin: 0;
     }
 
+.html, body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden
+}
+
 .dataTables_length {
     margin-top: 7px;
     margin-left: 20px;
@@ -54,5 +60,18 @@ div.container {
 }
 .btns {
    
+}
+.footers {
+    position: fixed;
+    left: 0;
+    height: 4%;
+    bottom: 0;
+    width: 100%;
+    
+    color: black;
+    text-align: center;
+}
+.div-print-buttons {    
+    
 }
 
