@@ -2,8 +2,10 @@
   "ExpandedNodes": [
     "",
     "\\Restaurantbookingpage",
-    "\\Restaurantbookingpage\\Content"
+    "\\Restaurantbookingpage\\Content",
+    "\\Restaurantbookingpage\\Views",
+    "\\Restaurantbookingpage\\Views\\Booking"
   ],
-  "SelectedNode": "\\Restaurantbookingpage\\Content\\Site.css",
+  "SelectedNode": "\\Restaurantbookingpage\\Views\\Booking\\Index.cshtml",
   "PreviewInSolutionExplorer": false
 }

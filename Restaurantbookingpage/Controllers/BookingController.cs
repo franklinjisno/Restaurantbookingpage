@@ -95,8 +95,7 @@ namespace Restaurantbookingpage.Controllers
         public ActionResult CreateEdit(Booking objbooking)
         {
             Bookingdbhandle objdbhandle = new Bookingdbhandle();
-            if (ModelState.IsValid)
-            {
+            
                 if (objbooking.Id > 0)
                 {
                     objdbhandle.UpdateDetails(objbooking);
@@ -107,8 +106,7 @@ namespace Restaurantbookingpage.Controllers
                     objdbhandle.UpdateDetails(objbooking);
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
-            }
-            return Json(false, JsonRequestBehavior.AllowGet);
+           
         }
 
         // Delete Booking

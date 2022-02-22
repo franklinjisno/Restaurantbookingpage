@@ -209,6 +209,7 @@
     <Content Include="Scripts\jquery-2.0.0.min.map" />
     <Content Include="Views\Booking\_OperationPartial.cshtml" />
     <Content Include="Views\Booking\_DeletePartial.cshtml" />
+    <Content Include="Views\Booking\_PrintView.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
