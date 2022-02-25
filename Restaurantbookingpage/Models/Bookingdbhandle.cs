@@ -206,5 +206,46 @@ namespace Restaurantbookingpage
             }
             return count;
         }
+
+        public List<Booking> ListOfBooking()
+        {
+            connection();
+            List<Booking> bookingList = new List<Booking>();
+
+            SqlCommand cmd = new SqlCommand("ListBookings", con);
+            cmd.CommandType = CommandType.StoredProcedure;            
+            SqlDataAdapter sd = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+
+            try
+            {
+                con.Open();
+                sd.Fill(dt);
+                con.Close();
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    bookingList.Add(
+                        new Booking
+                        {
+                            Id = Convert.ToInt32(dr["Id"]),
+                            Customer_Name = Convert.ToString(dr["Customer_Name"]),
+                            Datetime = Convert.ToDateTime(dr["Datetime"]),
+                            Dinning_Type = Convert.ToString(dr["Dinning_Type"]),
+                            NumberofGuest = Convert.ToInt32(dr["NumberofGuest"]),
+                            Contact = Convert.ToString(dr["Contact"]),
+                            Category = Convert.ToString(dr["Category"])
+                        });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw;
+            }
+            return bookingList;
+        }
+
     }
+
+
 }

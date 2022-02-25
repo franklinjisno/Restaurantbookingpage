@@ -10,16 +10,18 @@
             <button type="button" class="btn btn-info btn-check"  onclick="createbooking()">Create </button>
 
             <div class="btn-group" >
-                <button type="button"  title="Print" class="btn btn-danger div-print-buttons" id="btnPrint">Print</button>
+                <button type="button"   title="Print" class="btn btn-danger div-print-buttons" onclick="printall()">Print</button>
                 <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item" id="btnPdf" href="#">Export as PDF</a>
+                    <a class="dropdown-item"  onclick="pdfGenerate()">Export as PDF</a>
                     <a class="dropdown-item" id="btnExcel" href="#">Export as Excel</a>
                                        
                 </div>
             </div>
+
+          
         </div>
     </div>
     
@@ -73,15 +75,18 @@
     </div>
 </div>
 
-<div class="modal fade" id="print" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document" style="padding-left:50px">
-        <div class="modal-content" id="printPreview" style="width: 90%; background-color:antiquewhite">
+<div style="padding-left:-80%" class="modal fade" id="print" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document" >
+        <div class="modal-content" id="printPreview" style="width: 200%;height:150%; background-color:antiquewhite">
+            
 
+           
         </div>
 
     </div>
 </div>
 
+<iframe name="print_frames" width="0" height="0" frameborder="0" src="~/PDF/result.pdf"></iframe>
 
 <script>
     var dataTable;
@@ -120,13 +125,13 @@
                         }
                     }
                 ],
-                
+
                 "columnDefs": [
-                    
+
                     { "targets": [1,4], orderable: false },
                     { "targets": [6], orderable: false }
                 ],
-                
+
 
                 "ajax": {
 
@@ -169,27 +174,62 @@
                         }
 
                     }]
-                
-           
+
+
             });
     });
 
-    $(document).on('click', '#btnPrint', function () {        
-        var info = dataTable.page.info();
-        pageLength = info.length;
-        dataTable.page.len(info.recordsTotal).draw();
-        setTimeout(printFunction, 2000);        
-    });
+    
+    function printall() {
+        $.get("/Booking/Print", function (res) {
+            //$("#printPreview").html(res);
+            //$('#print').modal('show');
+            //console.log(res);
+        });
+        window.frames["print_frames"].window.focus();
+        window.frames["print_frames"].window.print();
+    }
 
-    
-    
-    function printFunction() {
-        $(".buttons-print")[0].click()
-        setTimeout(pdfExcelPrint, 2000);
+    function pdfGenerate() {
+        $.get("/Booking/Print", function (res) {
+            $("#printPreview").html(res);
+            $('#print').modal('show');
+            if (res) {
+                toastr.options = {
+                    "closeButton": true,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "positionClass": "toast-bottom-right",
+                    "preventDuplicates": false,
+                    "onclick": null,
+                    "showDuration": "200",
+                    "hideDuration": "1000",
+                    "timeOut": "3000",
+                    "extendedTimeOut": "1000",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut"
+                }
+                toastr["success"]("Pdf Saved to PDF/Result.pdf")
+            }
+        })
     }
-    function pdfExcelPrint() {
-        dataTable.page.len(pageLength).draw();
-    }
+
+    //$(document).on('click', '#btnPrint', function () {
+    //    var info = dataTable.page.info();
+    //    pageLength = info.length;
+    //    dataTable.page.len(info.recordsTotal).draw();
+    //    setTimeout(printFunction, 100);
+    //});
+
+    //function printFunction() {
+    //    $(".buttons-print")[0].click()
+    //    setTimeout(pdfExcelPrint, 100);
+    //}
+    //function pdfExcelPrint() {
+    //    dataTable.page.len(pageLength).draw();
+    //}
 
     $(document).on('click', '#btnExcel', function () {
         var info = dataTable.page.info();
@@ -203,24 +243,24 @@
         setTimeout(pdfExcelPrint, 100);
     }
 
-    $(document).on('click', '#btnPdf', function () {
-        var info = dataTable.page.info();
-        pageLength = info.length;
-        dataTable.page.len(info.recordsTotal).draw();
-        setTimeout(pdfFunction, 100);
-    });
+    //$(document).on('click', '#btnPdf', function () {
+    //    var info = dataTable.page.info();
+    //    pageLength = info.length;
+    //    dataTable.page.len(info.recordsTotal).draw();
+    //    setTimeout(pdfFunction, 100);
+    //});
 
-    function pdfFunction() {
-        $(".buttons-pdf")[0].click();
-        setTimeout(pdfExcelPrint, 100);
-    }
+    //function pdfFunction() {
+    //    $(".buttons-pdf")[0].click();
+    //    setTimeout(pdfExcelPrint, 100);
+    //}
 
     function createbooking() {
         $.get("/Booking/Create", { operation: "Create" }, function (res) {
             $("#bookingmodalbody").html(res);
             $("#bookingmodal").modal('show');
         })
-        
+
     }
 
     function Savebooking() {
@@ -232,7 +272,7 @@
         contactValidation();
         categoryValidation()
         form.validate();
-        
+
         if (!form.valid()) {
             return;
         } else {
@@ -338,7 +378,7 @@
         $.get("/Booking/View", { operation: "View" , id: id }, function (res) {
             $('#bookingmodalbody').html(res);
             $('#bookingmodal').modal('show');
-            
+
         })
     }
 
@@ -346,7 +386,7 @@
         $.get("/Booking/Edit", { operation: "Edit", id: id }, function (res) {
             $('#bookingmodalbody').html(res);
             $('#bookingmodal').modal('show');
-            
+
         })
     }
 
