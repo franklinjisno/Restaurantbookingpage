@@ -75,8 +75,8 @@
     </div>
 </div>
 
-<div class="modal fade  bd-example-modal-lg" id="print" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-lg" role="document" >
+<div class="modal fade  " id="print" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl" style="width:max-content" role="document" >
         <div class="modal-content" id="printPreview" style=" background-color:antiquewhite">
          
         </div>
@@ -179,14 +179,16 @@
     
     function printall() {
         $.get("/Booking/Print", function (res) {
-            //$("#printPreview").html(res);
-            //$('#print').modal('show');
-            //console.log(res);
+            $("#printPreview").html(res);
+            $('#print').modal('show');
+
         });
+        setTimeout(getprint,1000)
+    }
+    function getprint() {
         window.frames["print_frames"].window.focus();
         window.frames["print_frames"].window.print();
     }
-
     function pdfGenerate() {
         $.get("/Booking/Print", function (res) {
             $("#printPreview").html(res);
