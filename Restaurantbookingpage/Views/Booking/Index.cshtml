@@ -1,23 +1,17 @@
-﻿@{
-    Layout = "~/Views/Shared/_Layout.cshtml";
-}
-
-    
-
-
-    <div style="margin-top:8%">
+﻿    <div style="margin-top:8%">
         <div style=" margin-bottom: 6px;">
             <button type="button" class="btn btn-info btn-check"  onclick="createbooking()">Create </button>
 
             <div class="btn-group" >
                 <button type="button"   title="Print" class="btn btn-danger div-print-buttons" onclick="printall()">Print</button>
-                <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="sr-only">Toggle Dropdown</span>
+                <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split btn-height" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-chevron-down icon-size"></span>
                 </button>
                 <div class="dropdown-menu">
-                    <a class="dropdown-item"  onclick="pdfGenerate()">Export as PDF</a>
-                    <a class="dropdown-item" id="btnExcel" href="#">Export as Excel</a>
-                                       
+                    <ul class="list-alignment">
+                        <li class="dropdown-item" onclick="pdfGenerate()" style="list-style:none; cursor:pointer;">Export  to  PDF</li>
+                        <li class="dropdown-item" id="btnExcel" style="list-style: none; cursor: pointer">Export  to  Excel</li>
+                    </ul>           
                 </div>
             </div>
 
@@ -30,16 +24,16 @@
     <thead>
         <tr class="headercolour" style="background-color:burlywood;color:white;">
             <th style="text-align:center">
-                Cutomer Name
+                Customer Name
             </th>
             <th style="text-align:center">
                 Date of Booking
             </th>
             <th style="text-align:center">
-                Dinning Type
+                Dining Type
             </th>
             <th style="text-align:center">
-                Number of Guest
+                Number of Guests
             </th>
             <th style="text-align:center">
                 Contact
@@ -104,20 +98,6 @@
                 "buttons": [
                     {
                         extend: 'excel',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5]
-                        }
-                    },
-                    {
-                        extend: 'pdf',
-                        download:'open',
-                        exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5]
-                        }
-                    },
-                    {
-                        extend: 'print',
-                        autoPrint: true,
                         exportOptions: {
                             columns: [0, 1, 2, 3, 4, 5]
                         }
@@ -194,25 +174,6 @@
         $.get("/Booking/Print", function (res) {
             $("#printPreview").html(res);
             $('#print').modal('show');
-            if (res) {
-                toastr.options = {
-                    "closeButton": true,
-                    "newestOnTop": false,
-                    "progressBar": false,
-                    "positionClass": "toast-bottom-right",
-                    "preventDuplicates": false,
-                    "onclick": null,
-                    "showDuration": "200",
-                    "hideDuration": "1000",
-                    "timeOut": "3000",
-                    "extendedTimeOut": "1000",
-                    "showEasing": "swing",
-                    "hideEasing": "linear",
-                    "showMethod": "fadeIn",
-                    "hideMethod": "fadeOut"
-                }
-                toastr["success"]("Pdf Saved to PDF/Result.pdf")
-            }
         })
     }
 
@@ -227,9 +188,9 @@
     //    $(".buttons-print")[0].click()
     //    setTimeout(pdfExcelPrint, 100);
     //}
-    //function pdfExcelPrint() {
-    //    dataTable.page.len(pageLength).draw();
-    //}
+    function pdfExcelPrint() {
+        dataTable.page.len(pageLength).draw();
+    }
 
     $(document).on('click', '#btnExcel', function () {
         var info = dataTable.page.info();

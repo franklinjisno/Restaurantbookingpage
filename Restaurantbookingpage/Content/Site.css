@@ -13,7 +13,7 @@ input::-webkit-inner-spin-button {
 }
 
 .dataTables_length {
-    margin-top: 7px;
+    margin-top: 12px;
     margin-left: 20px;
 }
 
@@ -74,4 +74,20 @@ div.container {
 .div-print-buttons {    
     
 }
-
+.btn-height{
+    height:34px;
+    width:5px;
+}
+.icon-size{
+    font-size:10px;
+    margin-left:-5px;
+}
+.navbar {
+    background-image: linear-gradient(to bottom,#ffffff 0,#e9b66f 100%) !important;
+}
+.dropdown-menu {
+    min-width:126px !important;
+}
+.list-alignment{
+    margin-left:-29px;
+}
