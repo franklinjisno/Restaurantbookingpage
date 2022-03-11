@@ -6,34 +6,34 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Restaurant Booking</title>
-    
-    @Styles.Render("~/Content/CSS");
-    @Scripts.Render("~/Scripts/Script");
-    
+
+    @Styles.Render("~/Content/CSS")
+    @Scripts.Render("~/Scripts/Script")
+  
 </head>
 <body style="background-color:antiquewhite">
-    <div class="navbar navbar-inverse navbar-fixed-top" style="background-color: antiquewhite">
-        <div class="container">
+    <div class="navbar navbar-inverse navbar-static-top" style="background-color: antiquewhite">
+        <div class="container-fluid" style="text-align: center">
 
-            <h1 style="display: flex; justify-content: center; color: black"><b>Restaurant Booking</b></h1>
+            <h1><b>Restaurant Booking</b></h1>
 
         </div>
     </div>
    
     <div class="container body-content" style="font-size:15px">
         @RenderBody()
-        <hr />
+     
 
     </div>
-    <br />
+
 
     <div class="container body-content">
 
         <hr />
 
         <div>
-            <br />
-            <footer class="footers">
+        
+            <footer class="footer navbar-sticky-bottom" style="align-items:center">
                 <p>&copy; @DateTime.Now.Year - Restaurant Booking</p>
             </footer>
         </div>

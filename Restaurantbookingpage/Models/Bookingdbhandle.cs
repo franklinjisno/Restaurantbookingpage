@@ -15,7 +15,8 @@ namespace Restaurantbookingpage
         private void connection()
         {
             //string constring = ConfigurationManager.ConnectionStrings["BookingConn"].ToString();
-            string constring = "Data Source=LAPTOP-5IQ1TLRU;Initial Catalog=BookingpageDB;Integrated Security=True";
+            //string constring = "Data Source=LAPTOP-5IQ1TLRU;Initial Catalog=BookingpageDB;Integrated Security=True";
+            string constring = "Data Source=LAPTOP-FCT3Q2DO;Initial Catalog=BookingpageDB;Integrated Security=True";
             con = new SqlConnection(constring);
         }
 

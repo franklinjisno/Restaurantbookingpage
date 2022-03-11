@@ -1,4 +1,4 @@
-﻿    <div style="margin-top:8%">
+﻿    <div>
         <div style=" margin-bottom: 6px;">
             <button type="button" class="btn btn-info btn-check"  onclick="createbooking()">Create </button>
 
@@ -20,7 +20,7 @@
     </div>
     
 
-<table class="table table-bordered dt-responsive nowrap" style="text-align:center;overflow:hidden;" id="BookingTable">
+<table class="table table-bordered dt-responsive nowrap" style="text-align:center;overflow:hidden;width:100%" id="BookingTable">
     <thead>
         <tr class="headercolour" style="background-color:burlywood;color:white;">
             <th style="text-align:center">
@@ -52,7 +52,7 @@
 
 
 <div class="modal fade" id="bookingmodal" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document" style="padding-left:50px" >
+    <div class="modal-dialog" role="document" style="padding-left:8%" >
         <div class="modal-content" id="bookingmodalbody" style="width: 90%; background-color:antiquewhite">
 
         </div>
@@ -61,8 +61,8 @@
 </div>
 
 <div class="modal fade" id="bookingmodal1" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document" style="padding-left:150px; padding-top:200px;">
-        <div class="modal-content" id="bookingmodalbody1" style="width: 70%; background-color: antiquewhite">
+    <div class="modal-dialog" role="document" style="padding-left:8%; padding-top:200px;">
+        <div class="modal-content" id="bookingmodalbody1" style="width: 90%; background-color: antiquewhite">
 
         </div>
 
@@ -70,7 +70,7 @@
 </div>
 
 <div class="modal fade  " id="print" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-xl"  style="width:max-content" role="document">
+    <div class="modal-dialog modal-xl"  style="width: max-content; padding-left: 8%;" role="document">
         <div class="modal-content" id="printPreview" style=" background-color:antiquewhite">
             
             
@@ -90,7 +90,8 @@
                 "processing": true,
                 "serverSide": true,
                 "filter": true,
-                "scrollY": "400px",
+                "scrollY": "420px",
+                "scrollX": "380px",
                 "scrollCollapse": false,
                 "bInfo": true,
                 "order": [0, "asc"],
