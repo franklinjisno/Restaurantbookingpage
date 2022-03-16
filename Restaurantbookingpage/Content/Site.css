@@ -37,7 +37,7 @@ input::-webkit-inner-spin-button {
     width: 10%;
 }
 .dataTables_scrollBody {
-    overflow-x: auto !important;
+    overflow-x: hidden !important;
     overflow-y: auto !important;
 }
 .oranges {
@@ -99,4 +99,12 @@ div.container {
 }
 .list-alignment{
     margin-left:-29px;
+}
+.glyphicon-plus-sign {
+    color: green !important;
+    font-size:large;
+}
+
+.glyphicon-minus-sign {
+    color: red !important;
 }

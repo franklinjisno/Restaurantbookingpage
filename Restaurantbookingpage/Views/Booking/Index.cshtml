@@ -20,9 +20,10 @@
     </div>
     
 
-<table class="table table-bordered dt-responsive nowrap" style="text-align:center;overflow:hidden;width:100%" id="BookingTable">
+<table class="table table-bordered dispaly responsive nowrap" style="text-align:center;overflow:hidden;width:100%" id="BookingTable">
     <thead>
         <tr class="headercolour" style="background-color:burlywood;color:white;">
+            <th></th>
             <th style="text-align:center">
                 Customer Name
             </th>
@@ -90,25 +91,33 @@
                 "processing": true,
                 "serverSide": true,
                 "filter": true,
-                "scrollY": "420px",
-                "scrollX": "380px",
+                "scrollY": "420px",            
                 "scrollCollapse": false,
                 "bInfo": true,
-                "order": [0, "asc"],
+                "order": [1, "asc"],
                 "dom": '<"top"f>rt<"bottom"ilpB><"clear">',
                 "buttons": [
                     {
                         extend: 'excel',
                         exportOptions: {
-                            columns: [0, 1, 2, 3, 4, 5]
+                            columns: [1, 2, 3, 4, 5, 6]
                         }
                     }
                 ],
 
+                responsive: {
+                    details: {
+                        type: 'column'
+                    }
+                },
                 "columnDefs": [
+                    {
+                        className: 'dtr-control',
+                        orderable: false,
+                        targets: 0
+                    },
 
-                    { "targets": [1,4], orderable: false },
-                    { "targets": [6], orderable: false }
+                    { "targets": [2, 5, 7], orderable: false }
                 ],
 
 
@@ -123,6 +132,10 @@
                 },
 
                 columns: [
+                    {
+                        "data": null, "Width": "1%",
+                        "defaultContent": '<i onclick="myFunction(this)" class = "glyphicon glyphicon-plus-sign"> </ i>',
+                    },
 
                     { "data": "Customer_Name" },
 
@@ -216,6 +229,10 @@
     //    $(".buttons-pdf")[0].click();
     //    setTimeout(pdfExcelPrint, 100);
     //}
+
+    function myFunction(x) {
+        x.classList.toggle("glyphicon-minus-sign");
+    }
 
     function createbooking() {
         $.get("/Booking/Create", { operation: "Create" }, function (res) {
