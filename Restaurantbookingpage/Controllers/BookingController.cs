@@ -16,6 +16,7 @@ namespace Restaurantbookingpage.Controllers
     public class BookingController : Controller
     {
         // View Bookings
+        [Authorize]
         public ActionResult Index()
         {
             return View();
@@ -162,7 +163,7 @@ namespace Restaurantbookingpage.Controllers
                 table.Rows.Add(booking.Customer_Name,booking.Datetime.Date, booking.Dinning_Type,booking.NumberofGuest,booking.Contact,booking.Category);
 
             var pdf = table.ToPdf();
-            System.IO.File.WriteAllBytes(@"C:\Users\user\source\repos\Franklin_Restaurant\Restaurantbookingpage\Restaurantbookingpage\PDF\result.pdf", pdf);
+            System.IO.File.WriteAllBytes(@"C:/Users/91623/Desktop/Authentication/Restaurantbookingpage/Restaurantbookingpage/PDF/result.pdf", pdf);
 
             return PartialView("_PrintView");
             

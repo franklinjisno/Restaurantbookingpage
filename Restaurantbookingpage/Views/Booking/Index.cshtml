@@ -1,24 +1,23 @@
-﻿    <div>
-        <div style=" margin-bottom: 6px;">
-            <button type="button" class="btn btn-info btn-check"  onclick="createbooking()">Create </button>
-
-            <div class="btn-group" >
-                <button type="button"   title="Print" class="btn btn-danger div-print-buttons" onclick="printall()">Print</button>
-                <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split btn-height" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="glyphicon glyphicon-chevron-down icon-size"></span>
-                </button>
-                <div class="dropdown-menu">
-                    <ul class="list-alignment">
-                        <li class="dropdown-item" onclick="pdfGenerate()" style="list-style:none; cursor:pointer;">Export  to  PDF</li>
-                        <li class="dropdown-item" id="btnExcel" style="list-style: none; cursor: pointer">Export  to  Excel</li>
-                    </ul>           
-                </div>
+﻿<div>
+    <div style=" margin-bottom: 6px;">
+        <button type="button" class="btn btn-info btn-check" onclick="createbooking()">Create </button>
+        <div class="btn-group">
+            <button type="button" title="Print" class="btn btn-danger div-print-buttons" onclick="printall()">Print</button>
+            <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split btn-height" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-chevron-down icon-size"></span>
+            </button>
+            <div class="dropdown-menu">
+                <ul class="list-alignment">
+                    <li class="dropdown-item" onclick="pdfGenerate()" style="list-style:none; cursor:pointer;">Export  to  PDF</li>
+                    <li class="dropdown-item" id="btnExcel" style="list-style: none; cursor: pointer">Export  to  Excel</li>
+                </ul>
             </div>
-
-          
         </div>
+
+
     </div>
-    
+</div>
+
 
 <table class="table table-bordered dispaly responsive nowrap" style="text-align:center;overflow:hidden;width:100%" id="BookingTable">
     <thead>
@@ -53,7 +52,7 @@
 
 
 <div class="modal fade" id="bookingmodal" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog" role="document" style="padding-left:8%" >
+    <div class="modal-dialog" role="document" style="padding-left:8%">
         <div class="modal-content" id="bookingmodalbody" style="width: 90%; background-color:antiquewhite">
 
         </div>
@@ -71,13 +70,14 @@
 </div>
 
 <div class="modal fade  " id="print" role="dialog" data-backdrop="static" data-keyboard="false">
-    <div class="modal-dialog modal-xl"  style="width: max-content; padding-left: 8%;" role="document">
+    <div class="modal-dialog modal-xl" style="width: max-content; padding-left: 8%;" role="document">
         <div class="modal-content" id="printPreview" style=" background-color:antiquewhite">
-            
-            
+
+
         </div>
     </div>
 </div>
+<a href="@Url.Action("","")" class="navbar-brand">Logout</a>
 
 <iframe name="print_frames" width="0" height="0" frameborder="0" src="~/PDF/result.pdf"></iframe>
 
@@ -91,7 +91,7 @@
                 "processing": true,
                 "serverSide": true,
                 "filter": true,
-                "scrollY": "420px",            
+                "scrollY": "420px",
                 "scrollCollapse": false,
                 "bInfo": true,
                 "order": [1, "asc"],
@@ -171,14 +171,14 @@
             });
     });
 
-    
+
     function printall() {
         $.get("/Booking/Print", function (res) {
             $("#printPreview").html(res);
             $('#print').modal('show');
 
         });
-        setTimeout(getprint,1000)
+        setTimeout(getprint, 1000)
     }
     function getprint() {
         window.frames["print_frames"].window.focus();
@@ -276,7 +276,7 @@
                     }
                     toastr["success"]("Booking Saved")
                     modal.modal('hide');
-                    dataTable.ajax.reload(null,false);
+                    dataTable.ajax.reload(null, false);
                 }
             })
         }
@@ -354,7 +354,7 @@
     }
 
     function getDetails(id) {
-        $.get("/Booking/View", { operation: "View" , id: id }, function (res) {
+        $.get("/Booking/View", { operation: "View", id: id }, function (res) {
             $('#bookingmodalbody').html(res);
             $('#bookingmodal').modal('show');
 
@@ -370,43 +370,43 @@
     }
 
     function getDelete(id) {
-        $.get("/Booking/DeletePartial", { operation: "Delete" , id: id }, function (res) {
+        $.get("/Booking/DeletePartial", { operation: "Delete", id: id }, function (res) {
             $('#bookingmodalbody1').html(res);
             $('#bookingmodal1').modal('show');
         })
     }
 
     function Deletebooking(id) {
-            var modal = $("#bookingmodal1");
-            var form = $('form[name="bookingdeleteForm"]');
-            form.validate();
-            if (!form.valid()) {
-                return;
-            } else {
-                var data = form.serialize();
-                $.post("/Booking/Delete", data, function (res) {
-                    if (res) {
-                        toastr.options = {
-                            "closeButton": true,
-                            "newestOnTop": false,
-                            "progressBar": true,
-                            "positionClass": "toast-bottom-right",
-                            "preventDuplicates": false,
-                            "onclick": null,
-                            "showDuration": "200",
-                            "hideDuration": "1000",
-                            "timeOut": "3000",
-                            "extendedTimeOut": "1000",
-                            "showEasing": "swing",
-                            "hideEasing": "linear",
-                            "showMethod": "fadeIn",
-                            "hideMethod": "fadeOut"
-                        }
-                        toastr["success"]("Booking Deleted")
-                        modal.modal('hide');
-                        dataTable.ajax.reload(null, false);
+        var modal = $("#bookingmodal1");
+        var form = $('form[name="bookingdeleteForm"]');
+        form.validate();
+        if (!form.valid()) {
+            return;
+        } else {
+            var data = form.serialize();
+            $.post("/Booking/Delete", data, function (res) {
+                if (res) {
+                    toastr.options = {
+                        "closeButton": true,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "200",
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
                     }
-                })
-            }
+                    toastr["success"]("Booking Deleted")
+                    modal.modal('hide');
+                    dataTable.ajax.reload(null, false);
+                }
+            })
+        }
     }
 </script>
