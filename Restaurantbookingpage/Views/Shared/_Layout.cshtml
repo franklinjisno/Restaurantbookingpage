@@ -14,11 +14,15 @@
     <script src="~/Scripts/DataTables/dataTables.responsive.min.js"></script>
 
 </head>
-<body style= "background-color: #ffc67a";>
+<body style= "background-color:#ffffff";>
     <div class="navbar navbar-inverse navbar-static-top" style="background-color: antiquewhite">
-        <div class="container-fluid" style="text-align: center; background-color: #f0ad4e">
+        <div class="container-fluid" style="text-align: center; background-color: #1d8b96;">
 
             <h1><b>RESTAURANT BOOKING</b></h1>
+            @if(Request.IsAuthenticated)
+            {
+                <strong style="margin-left: -1365px;">@Html.Encode(User.Identity.Name) </strong>
+            }
 
         </div>
     </div>

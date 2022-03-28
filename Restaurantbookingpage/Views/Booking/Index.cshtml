@@ -17,6 +17,7 @@
 
     </div>
 </div>
+<button type="button" class="btn" style="background-color: #aba6a6; width: 80px; margin-left: 94%;  margin-top: -7%; color: white;" onclick="Logout()">LogOut</button>
 
 
 <table class="table table-bordered dispaly responsive nowrap" style="text-align:center;overflow:hidden;width:100%" id="BookingTable">
@@ -77,7 +78,7 @@
         </div>
     </div>
 </div>
-<a href="@Url.Action("","")" class="navbar-brand">Logout</a>
+@*<a href="@Url.Action("","")" class="navbar-brand">Logout</a>*@
 
 <iframe name="print_frames" width="0" height="0" frameborder="0" src="~/PDF/result.pdf"></iframe>
 
@@ -206,6 +207,11 @@
         dataTable.page.len(pageLength).draw();
     }
 
+    function Logout() {
+        $.get("/Account/LogOut");
+        location.reload();
+    }
+
     $(document).on('click', '#btnExcel', function () {
         var info = dataTable.page.info();
         pageLength = info.length;
@@ -286,6 +292,7 @@
         var letters = /^[A-Z a-z]+$/;
         if (!$("#Customer_Name").val().match(letters) && $("#Customer_Name").val() != "") {
             $("#nameValidation").html("Please Provide Valid Name");
+
         }
         else if ($("#Customer_Name").val() == "") {
             $("#nameValidation").html("Customer Name Required");

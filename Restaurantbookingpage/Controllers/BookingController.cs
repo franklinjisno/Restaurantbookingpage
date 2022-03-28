@@ -10,6 +10,7 @@ using System.IO;
 using System.Text;
 using ArrayToPdf;
 using System.Data;
+using Restaurantbookingpage.Models;
 
 namespace Restaurantbookingpage.Controllers
 {
@@ -21,6 +22,13 @@ namespace Restaurantbookingpage.Controllers
         {
             return View();
         }
+        [Authorize]
+        public ActionResult List()
+        {
+            return View();
+        }
+
+
         [HttpPost]
         public ActionResult BookingData()
         {
@@ -42,7 +50,8 @@ namespace Restaurantbookingpage.Controllers
                 return View();
             }
         }
-        
+
+      
         // Add new booking
         [HttpGet]
         public ActionResult Create(string operation)
@@ -101,15 +110,28 @@ namespace Restaurantbookingpage.Controllers
         public ActionResult CreateEdit(Booking objbooking)
         {
             Bookingdbhandle objdbhandle = new Bookingdbhandle();
-            
+            objbooking.Datetime = DateTime.Now;
                 if (objbooking.Id > 0)
                 {
+                bool authenticated = Request.IsAuthenticated;
+                var AdUser = User.Identity.Name;
+                objbooking.CreatedBy = AdUser;
+                objbooking.ModifiedBy = AdUser;
+                objbooking.ModifiedDate = DateTime.Now.ToString();
+                objbooking.CreatedDate = DateTime.Now.ToString();
+                
                     objdbhandle.UpdateDetails(objbooking);
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
                 else
                 {
-                    objdbhandle.UpdateDetails(objbooking);
+                bool authenticated = Request.IsAuthenticated;
+                var AdUser = User.Identity.Name;
+                objbooking.CreatedBy = AdUser;
+                objbooking.ModifiedBy = AdUser;
+                objbooking.ModifiedDate = DateTime.Now.ToString();
+                objbooking.CreatedDate= DateTime.Now.ToString();
+                objdbhandle.UpdateDetails(objbooking);
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
            
@@ -163,7 +185,7 @@ namespace Restaurantbookingpage.Controllers
                 table.Rows.Add(booking.Customer_Name,booking.Datetime.Date, booking.Dinning_Type,booking.NumberofGuest,booking.Contact,booking.Category);
 
             var pdf = table.ToPdf();
-            System.IO.File.WriteAllBytes(@"C:/Users/91623/Desktop/Authentication/Restaurantbookingpage/Restaurantbookingpage/PDF/result.pdf", pdf);
+            System.IO.File.WriteAllBytes(@"C:/Users/91623/Desktop/Demo/Restaurantbookingpage/Restaurantbookingpage/PDF/result.pdf", pdf);
 
             return PartialView("_PrintView");
             

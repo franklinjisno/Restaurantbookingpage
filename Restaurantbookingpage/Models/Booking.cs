@@ -19,7 +19,7 @@ namespace Restaurantbookingpage
         public string Customer_Name { get; set; }
 
         [Required(ErrorMessage = "Date & Time is required.")]
-        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MMM/yyyy}")]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:yyyy/MM/dd}")]
         public DateTime Datetime { get; set; }
 
         //[Required(ErrorMessage = "Dinning Type is required.")]
@@ -31,5 +31,10 @@ namespace Restaurantbookingpage
         public string Contact { get; set; }
         public string Category { get; set; }
         public Actions Actions { get; set; }
+
+        public string CreatedBy { get; internal set; }
+        public string CreatedDate { get; internal set; }
+        public string ModifiedBy { get; internal set; }
+        public string ModifiedDate { get; internal set; }
     }
 }

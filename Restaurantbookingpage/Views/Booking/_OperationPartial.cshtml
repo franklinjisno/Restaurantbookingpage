@@ -25,13 +25,13 @@
                     </div>
                 </div>
 
-                <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
+                @*<div class="form-group" style="padding-left: 20px; margin-top: 5%;">
                     <h5><b>Date Time</b></h5>
                     <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
                         @Html.EditorFor(model => model.Datetime, new { htmlAttributes = new { @type = "date", @id = "Datetime", @Value = Model.Datetime.ToString("yyyy/MM/dd"), @min = DateTime.Today.ToString("yyyy/MM/dd"), @class = "form-control" } })
                         <small style="position:absolute">@Html.ValidationMessageFor(model => model.Datetime, "", new { @class = "text-danger", @Id = "dateValidation" })</small>
                     </div>
-                </div>
+                </div>*@
 
                 <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
                     <h5><b>Dinning Type</b></h5>

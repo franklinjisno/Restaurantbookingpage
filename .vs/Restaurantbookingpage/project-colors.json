@@ -10,7 +10,22 @@
       "ProjectGuid": "a2fe74e1-b743-11d0-ae1a-00a0c90fffc3",
       "DisplayName": "Miscellaneous Files",
       "ColorIndex": -1
+    },
+    "0daa9084-5406-4d54-9e1d-9f3c3e785e95": {
+      "ProjectGuid": "0daa9084-5406-4d54-9e1d-9f3c3e785e95",
+      "DisplayName": "BookingClass",
+      "ColorIndex": 1
+    },
+    "44be1f1a-5b76-4ff6-bfe1-c99e8eca14a9": {
+      "ProjectGuid": "44be1f1a-5b76-4ff6-bfe1-c99e8eca14a9",
+      "DisplayName": "WebAPI",
+      "ColorIndex": 2
+    },
+    "be73fbb1-c193-43ad-b1ef-77824fb6fef8": {
+      "ProjectGuid": "be73fbb1-c193-43ad-b1ef-77824fb6fef8",
+      "DisplayName": "RestaurantWebAPI",
+      "ColorIndex": 3
     }
   },
-  "NextColorIndex": 1
+  "NextColorIndex": 4
 }

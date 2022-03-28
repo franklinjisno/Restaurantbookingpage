@@ -1,28 +1,514 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
+﻿<div>
+    <input type="button" value="View Booking" style="background-color: ghostwhite; margin-bottom: -35px;" onclick="location.href='@Url.Action("List", "Booking")'" />
 
-<h3>
-    @Html.ActionLink("Register new user", "Register")
-</h3>
-<body>
-
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                @if (Request.IsAuthenticated)
-                {
-                    <a href="@Url.Action("","")" class="navbar-brand" style="padding-top:500px;">Logout</a>
-                }
-                
-
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
+</div>
+<div>
+    <div style=" margin-bottom: 6px;">
+        <button type="button" class="btn btn-info btn-check" style=" margin-bottom: -33px;" onclick="createaccount()">Register </button>
+        <div class="btn-group">
+            <button type="button" title="Print" class="btn btn-danger" style="margin-top: 31px"; margin-bottom: auto; div-print-buttons" onclick="printall()">Print</button>
+            <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split btn-height" style=" margin-top: 31px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span class="glyphicon glyphicon-chevron-down icon-size"></span>
+            </button>
+            <div class="dropdown-menu">
+                <ul class="list-alignment">
+                    <li class="dropdown-item" onclick="pdfGenerate()" style="list-style:none; cursor:pointer;">Export  to  PDF</li>
+                    <li class="dropdown-item" id="btnExcel" style="list-style: none; cursor: pointer">Export  to  Excel</li>
                 </ul>
             </div>
-</body>
+        </div>
+
+
+    </div>
+</div>
+
+<button type="button" class="btn" style="background-color: #aba6a6; width: 80px; margin-left: 94%;  margin-top: -8%; color: white;" onclick="Logout()">LogOut</button>
+
+
+
+
+
+<table class="table table-bordered dispaly responsive nowrap" style="text-align:center;overflow:hidden;width:100%" id="UserTable">
+    <thead>
+        <tr class="headercolour" style="background-color:burlywood;color:white;">
+            <th></th>
+            <th style="text-align:center">
+                Name
+            </th>
+            <th style="text-align:center">
+                Email
+            </th>
+            @*<th style="text-align:center">
+                    Password
+                </th>*@
+            <th style="text-align:center">
+                ContactNo
+            </th>
+            <th style="text-align:center">
+                Action
+            </th>
+        </tr>
+    </thead>
+
+</table>
+
+
+
+<div class="modal fade" id="accountmodal" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document" style="padding-left:8%">
+        <div class="modal-content" id="accountmodalbody" style="width: 90%; background-color:antiquewhite">
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="accountmodal1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document" style="padding-left:8%; padding-top:200px;">
+        <div class="modal-content" id="accountmodalbody1" style="width: 90%; background-color: antiquewhite">
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade  " id="print" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog modal-xl" style="width: max-content; padding-left: 8%;" role="document">
+        <div class="modal-content" id="printPreview" style=" background-color:antiquewhite">
+
+
+        </div>
+    </div>
+</div>
+
+<iframe name="print_frames" width="0" height="0" frameborder="0" src="~/PDF/user.pdf"></iframe>
+
+<script>
+    function format(d) {
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+            '<tr>' +
+            '<td>CreatedBy:</td>' +
+            '<td>' + d.CreatedBy + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>CreatedDate:</td>' +
+            '<td>' + d.CreatedDate + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>ModifiedBy:</td>' +
+            '<td>' + d.ModifiedBy + '</td>' +
+            '</tr>' +
+            '<td>ModifiedDate:</td>' +
+            '<td>' + d.ModifiedDate + '</td>'
+        '</table>';
+    }
+    var dataTable;
+    $(document).ready(function () {
+
+        dataTable = $('#UserTable').DataTable(
+
+            {
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "scrollY": "420px",
+                "scrollCollapse": false,
+                "bInfo": true,
+                "order": [1, "asc"],
+                "dom": '<"top"f>rt<"bottom"ilpB><"clear">',
+                "buttons": [
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            columns: [1, 2, 3, 4, 5, 6,7]
+                        }
+                    }
+                ],
+
+                responsive: {
+                    details: {
+                        type: 'column'
+                    }
+                },
+                "columnDefs": [
+                    {
+                        className: 'dt-control',
+                        orderable: false,
+                        targets: 0
+                    },
+
+                    { "targets": [2,3,4], orderable: false }
+                ],
+
+
+                "ajax": {
+
+                    url: "/Account/AccountData",
+
+                    type: "POST",
+
+                    datatype: "json"
+
+                },
+
+                columns: [
+                    {
+                        "data": null, "Width": "1%",
+                        "defaultContent": '<i onclick="myFunction(this)" class = "glyphicon glyphicon-plus-sign"> </ i>',
+                    },
+
+                    { "data": "Name" },
+
+                    //{
+                    //    "data": "Datetime",
+                    //    "type": "shortdatetime",
+                    //    "render": function (value) {
+                    //        if (value === null) return "";
+                    //        var pattern = /Date\(([^)]+)\)/;
+                    //        var results = pattern.exec(value);
+                    //        var dt = new Date(parseFloat(results[1]));
+                    //        return dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear()
+                    //    }
+                    //},
+
+                    { "data": "Email" },
+
+                    //{ "data": "Password" },
+
+                    { "data": "ContactNo" },
+
+                  
+
+
+                    {
+                        "data": "Id",
+                        "render": function (account) {
+                            return ('<a class="blues" id="viewclick" title="View" onclick="getDetails(' + account + ')"><span class="glyphicon glyphicon-eye-open"></span></a> <a class="oranges" id="editclicks" title="Edit" onclick="getEditDetails(' + account + ')"><span class="glyphicon glyphicon-edit"></span></a> <a class="reds" title="Delete" onclick="getDelete(' + account + ')"><span class="glyphicon glyphicon-trash"></span></a>');
+                        }
+
+                    }]
+
+
+            });
+        $('#UserTable tbody').on('click', 'td.dt-control', function ()
+        {
+            var tr = $(this).closest('tr');
+            var row = dataTable.row(tr);
+
+            if (row.child.isShown())
+            {
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else
+            {
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+
+    });
+
+
+    function printall() {
+        $.get("/Account/Print", function (res) {
+            $("#printPreview").html(res);
+            $('#print').modal('show');
+
+        });
+        setTimeout(getprint, 1000)
+    }
+    function getprint() {
+        window.frames["print_frames"].window.focus();
+        window.frames["print_frames"].window.print();
+    }
+    function pdfGenerate() {
+        $.get("/Account/Print", function (res) {
+            $("#printPreview").html(res);
+            $('#print').modal('show');
+        })
+    }
+
+    //$(document).on('click', '#btnPrint', function () {
+    //    var info = dataTable.page.info();
+    //    pageLength = info.length;
+    //    dataTable.page.len(info.recordsTotal).draw();
+    //    setTimeout(printFunction, 100);
+    //});
+
+    //function printFunction() {
+    //    $(".buttons-print")[0].click()
+    //    setTimeout(pdfExcelPrint, 100);
+    //}
+    function pdfExcelPrint() {
+        dataTable.page.len(pageLength).draw();
+    }
+
+    $(document).on('click', '#btnExcel', function () {
+        var info = dataTable.page.info();
+        pageLength = info.length;
+        dataTable.page.len(info.recordsTotal).draw();
+        setTimeout(excelFunction, 100);
+    });
+
+    function excelFunction() {
+        $(".buttons-excel")[0].click();
+        setTimeout(pdfExcelPrint, 100);
+    }
+
+    //$(document).on('click', '#btnPdf', function () {
+    //    var info = dataTable.page.info();
+    //    pageLength = info.length;
+    //    dataTable.page.len(info.recordsTotal).draw();
+    //    setTimeout(pdfFunction, 100);
+    //});
+
+    //function pdfFunction() {
+    //    $(".buttons-pdf")[0].click();
+    //    setTimeout(pdfExcelPrint, 100);
+    //}
+
+    function myFunction(x) {
+        x.classList.toggle("glyphicon-minus-sign");
+    }
+
+    function createaccount() {
+        $.get("/Account/Create", { operation: "Create" }, function (res) {
+            $("#accountmodalbody").html(res);
+            $("#accountmodal").modal('show');
+        })
+
+    }
+
+    function Saveaccount() {
+        var modal = $("#accountmodal");
+        var form = $('form[name="accountForm"]');
+        nameValidation();
+        contactValidation();
+        /*emailValidation();*/
+        passwordValidation();
+        if (!form.valid()) {
+            return;
+        } else {
+            var data = form.serialize();
+            $.post("/Account/Register", data, function (res) {
+                if (res) {
+                    toastr.options = {
+                        "closeButton": true,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "200",
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr["success"]("Registration Successfull")
+                    modal.modal('hide');
+                    dataTable.ajax.reload(null, false);
+                }
+            })
+        }
+    }
+
+    function savechanges() {
+        var modal = $("#accountmodal");
+        var form = $('form[name="accountForm"]');
+        nameValidation();
+        contactValidation();
+       /* emailValidation();*/
+        passwordValidation();
+
+        if (!form.valid()) {
+            return;
+        } else {
+            var data = form.serialize();
+            $.post("/Account/EditUser", data, function (res) {
+                if (res) {
+                    toastr.options = {
+                        "closeButton": true,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "200",
+                        "hideDuration": "1000"
+                        ,
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr["success"]("Updated Successfully")
+                    modal.modal('hide');
+                    dataTable.ajax.reload(null, false);
+                }
+            })
+        }
+    }
+
+
+    function nameValidation() {
+        var letters = /^[A-Z a-z]+$/;
+        if (!$("#Name").val().match(letters) && $("#Name").val() != "") {
+            $("#nameValidation").html("Please Provide Valid Name");
+
+        }
+        else if ($("#Name").val() == "") {
+            $("#nameValidation").html(" Name Required");
+        }
+        else if ($("#Name").val().length >= 20) {
+            $("#nameValidation").html("Name must contain only 20 characters");
+        }
+        else if ($("#Name").val().length <= 2) {
+            $("#nameValidation").html("Please Provide Valid Name");
+        }
+        else {
+            $("#nameValidation").html("");
+        }
+    }
+
+
+    //function emailValidation() {
+
+    //    if ($("#Email").val() == "") {
+    //        $("#emailValidation").html(" Email Required");
+    //    }
+    //    else if ($("#Email").val().length >= 30) {
+    //        $("#emailValidation").html("Email must contain only 30 characters");
+    //    }
+    //    else if ($("#Email").val().length <= 15) {
+    //        $("#emailValidation").html("Please Provide Valid Email");
+    //    }
+    //    else {
+    //        $("#emailValidation").html("");
+    //    }
+    //}
+
+
+    function passwordValidation() {
+
+        if ($("#Password").val() == "") {
+            $("#passwordValidation").html(" Password Required");
+        }
+        else if ($("#Password").val().length >= 10) {
+            $("#passwordValidation").html("Password must contain only 10 characters");
+        }
+        else if ($("#Password").val().length <= 5) {
+            $("#passwordValidation").html("Please Provide Valid password");
+        }
+        else {
+            $("#passwordValidation").html("");
+        }
+    }
+
+
+
+
+
+    function contactValidation() {
+        var expression = /^[0-9]+$/;
+        if (!$("#ContactNo").val().match(expression) && $("#Contact").val() != "") {
+            $("#contactValidation").html("Please Provide Valid Contact Number");
+        }
+        else if ($("#ContactNo").val() == "") {
+            $("#contactValidation").html("Contact Number is Required");
+        }
+        else if ($("#ContactNo").val().length >= 11) {
+            $("#contactValidation").html("Contact must contain only 10 characters");
+        }
+        else if ($("#ContactNo").val().length <= 9) {
+            $("#contactValidation").html("Contact Number Not Valid");
+        }
+        else {
+            $("#contactValidation").html("");
+        }
+    }
+
+    //function categoryValidation() {
+    //    if ($("#Category").val() == "") {
+    //        $("#categoryValidation").html("Category Required");
+    //    }
+    //    else {
+    //        $("#categoryValidation").html("");
+    //    }
+    //}
+    function Logout() {
+        $.get("/Account/LogOut");
+        location.reload();
+    }
+
+    function getDetails(id) {
+        $.get("/Account/View", { operation: "View", id: id }, function (res) {
+            $('#accountmodalbody').html(res);
+            $('#accountmodal').modal('show');
+
+        })
+    }
+
+    function getEditDetails(id) {
+        $.get("/Account/Edit", { operation: "Edit", id: id }, function (res) {
+            $('#accountmodalbody').html(res);
+            $('#accountmodal').modal('show');
+
+        })
+    }
+
+    function getDelete(id)
+    {
+        $.get("/Account/DeletePartial", { operation: "Delete", id: id }, function (res)
+        {
+            $('#accountmodalbody1').html(res);
+            $('#accountmodal1').modal('show');
+        })
+    }
+
+    function Deleteaccount(id)
+    {
+        var modal = $("#accountmodal1");
+        var form = $('form[name="accountdeleteForm"]');
+        form.validate();
+        if (!form.valid())
+        {
+            return;
+        } else
+        {
+            var data = form.serialize();
+            $.post("/Account/Delete", data, function (res)
+            {
+                if (res)
+                {
+                    toastr.options =
+                    {
+                        "closeButton": true,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "200",
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr["success"]("User Deleted")
+                    modal.modal('hide');
+                    dataTable.ajax.reload(null, false);
+                }
+            })
+        }
+    }
+</script>

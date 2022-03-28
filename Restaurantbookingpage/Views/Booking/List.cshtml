@@ -1,0 +1,482 @@
+﻿<div>
+    <input type="button" value="View User" style="background-color: ghostwhite; margin-bottom: -35px;" onclick="location.href='@Url.Action("Index", "Account")'" />
+
+</div>
+<div>
+    <div style=" margin-bottom: 6px;">
+        <button type="button" class="btn btn-info btn-check" style=" margin-bottom: -33px;" onclick="createbooking()">Create </button>
+        @*<div class="btn-group">
+                <button type="button" title="Print" class="btn btn-danger div-print-buttons" onclick="printall()">Print</button>
+                <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split btn-height" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <span class="glyphicon glyphicon-chevron-down icon-size"></span>
+                </button>
+                <div class="dropdown-menu">
+                    <ul class="list-alignment">
+                        <li class="dropdown-item" onclick="pdfGenerate()" style="list-style:none; cursor:pointer;">Export  to  PDF</li>
+                        <li class="dropdown-item" id="btnExcel" style="list-style: none; cursor: pointer">Export  to  Excel</li>
+                    </ul>
+                </div>
+            </div>*@
+
+
+    </div>
+</div>
+<button type="button" class="btn" style="background-color: #aba6a6; width: 80px; margin-left: 94%;  margin-top: -8%; color: white;" onclick="Logout()">LogOut</button>
+
+
+
+
+
+<table class="table table-bordered dispaly responsive nowrap" style="text-align:center;overflow:hidden;width:100%" id="BookingTable">
+    <thead>
+        <tr class="headercolour" style="background-color:burlywood;color:white;">
+            <th></th>
+            <th style="text-align:center">
+                Customer Name
+            </th>
+            <th style="text-align:center">
+                Date of Booking
+            </th>
+            <th style="text-align:center">
+                Dining Type
+            </th>
+            <th style="text-align:center">
+                Number of Guests
+            </th>
+            <th style="text-align:center">
+                Contact
+            </th>
+            <th style="text-align:center">
+                Category
+            </th>
+
+            @*<th style="text-align:center">
+                    CreatedBy
+                </th>
+                <th style="text-align:center">
+                    CreatedDate
+                </th>
+                <th style="text-align:center">
+                    ModifiedBy
+                </th>
+                <th style="text-align:center">
+                    ModifiedDate
+                </th>*@
+
+            <th style="text-align:center">
+                Action
+            </th>
+        </tr>
+    </thead>
+
+</table>
+
+
+
+<div class="modal fade" id="bookingmodal" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document" style="padding-left:8%">
+        <div class="modal-content" id="bookingmodalbody" style="width: 90%; background-color:antiquewhite">
+
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="bookingmodal1" role="dialog" data-backdrop="static" data-keyboard="false">
+    <div class="modal-dialog" role="document" style="padding-left:8%; padding-top:200px;">
+        <div class="modal-content" id="bookingmodalbody1" style="width: 90%; background-color: antiquewhite">
+
+        </div>
+
+    </div>
+</div>
+
+@*<div class="modal fade  " id="print" role="dialog" data-backdrop="static" data-keyboard="false">
+        <div class="modal-dialog modal-xl" style="width: max-content; padding-left: 8%;" role="document">
+            <div class="modal-content" id="printPreview" style=" background-color:antiquewhite">
+
+
+            </div>
+        </div>
+    </div>*@
+
+
+@*<iframe name="print_frames" width="0" height="0" frameborder="0" src="~/PDF/result.pdf"></iframe>*@
+
+<script>
+    function Logout() {
+        $.get("/Account/LogOut");
+        location.reload();
+    }
+    function format(d) {
+        return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+            '<tr>' +
+            '<td>CreatedBy:</td>' +
+            '<td>' + d.CreatedBy + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>CreatedDate:</td>' +
+            '<td>' + d.CreatedDate + '</td>' +
+            '</tr>' +
+            '<tr>' +
+            '<td>ModifiedBy:</td>' +
+            '<td>' + d.ModifiedBy + '</td>' +
+            '</tr>' +
+            '<td>ModifiedDate:</td>' +
+            '<td>' + d.ModifiedDate + '</td>'
+        '</table>';
+    }
+
+    var dataTable;
+    $(document).ready(function () {
+
+        dataTable = $('#BookingTable').DataTable(
+
+            {
+                "processing": true,
+                "serverSide": true,
+                "filter": true,
+                "scrollY": "420px",
+                "scrollCollapse": false,
+                "bInfo": true,
+                "order": [1, "asc"],
+                "dom": '<"top"f>rt<"bottom"ilpB><"clear">',
+                "buttons": [
+                    {
+                        extend: 'excel',
+                        exportOptions: {
+                            //    columns: [1, 2, 3, 4, 5, 6]
+                        }
+                    }
+                ],
+
+                responsive: {
+                    details: {
+                        type: 'column'
+                    }
+                },
+                "columnDefs": [
+                    {
+                        className: 'dt-control',
+                        orderable: false,
+                        targets: 0
+                    },
+
+                    //    { "targets": [2, 5, 7], orderable: false }
+                ],
+
+
+                "ajax": {
+
+                    url: "/Booking/BookingData",
+
+                    type: "POST",
+
+                    datatype: "json"
+
+                },
+
+                columns: [
+                    {
+                        "data": null, "Width": "1%",
+                        "defaultContent": '<i onclick="myFunction(this)" class = "glyphicon glyphicon-plus-sign"> </ i>',
+                    },
+
+                    { "data": "Customer_Name" },
+
+                    {
+                        "data": "Datetime",
+                        "type": "shortdatetime",
+                        "render": function (value) {
+                            if (value === null) return "";
+                            var pattern = /Date\(([^)]+)\)/;
+                            var results = pattern.exec(value);
+                            var dt = new Date(parseFloat(results[1]));
+                            return dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear()
+                        }
+                    },
+
+                    { "data": "Dinning_Type" },
+
+                    { "data": "NumberofGuest" },
+
+                    { "data": "Contact" },
+
+                    { "data": "Category" },
+                    //{ "data": "CreatedBy" },
+
+                    //{ "data": "CreatedDate" },
+                    //{ "data": "ModifiedBy" },
+                    //{ "data": "ModifiedDate" },
+
+                    {
+                        "data": "Id",
+                        "render": function (booking) {
+                            return ('<a class="blues" id="viewclick" title="View" onclick="getDetails(' + booking + ')"><span class="glyphicon glyphicon-eye-open"></span></a> <a class="oranges" id="editclicks" title="Edit" onclick="getEditDetails(' + booking + ')"><span class="glyphicon glyphicon-edit"></span></a> <a class="reds" title="Delete" onclick="getDelete(' + booking + ')"><span class="glyphicon glyphicon-trash"></span></a>');
+                        }
+
+                    }]
+
+
+            });
+        $('#BookingTable tbody').on('click', 'td.dt-control', function () {
+            var tr = $(this).closest('tr');
+            var row = dataTable.row(tr);
+
+            if (row.child.isShown()) {
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                row.child(format(row.data())).show();
+                tr.addClass('shown');
+            }
+        });
+    });
+
+
+    function printall() {
+        $.get("/Booking/Print", function (res) {
+            $("#printPreview").html(res);
+            $('#print').modal('show');
+
+        });
+        setTimeout(getprint, 1000)
+    }
+    function getprint() {
+        window.frames["print_frames"].window.focus();
+        window.frames["print_frames"].window.print();
+    }
+    function pdfGenerate() {
+        $.get("/Booking/Print", function (res) {
+            $("#printPreview").html(res);
+            $('#print').modal('show');
+        })
+    }
+
+    //$(document).on('click', '#btnPrint', function () {
+    //    var info = dataTable.page.info();
+    //    pageLength = info.length;
+    //    dataTable.page.len(info.recordsTotal).draw();
+    //    setTimeout(printFunction, 100);
+    //});
+
+    //function printFunction() {
+    //    $(".buttons-print")[0].click()
+    //    setTimeout(pdfExcelPrint, 100);
+    //}
+    function pdfExcelPrint() {
+        dataTable.page.len(pageLength).draw();
+    }
+
+    //function Logout() {
+    //    $.get("/Account/LogOut");
+    //    location.reload();
+    //}
+
+    $(document).on('click', '#btnExcel', function () {
+        var info = dataTable.page.info();
+        pageLength = info.length;
+        dataTable.page.len(info.recordsTotal).draw();
+        setTimeout(excelFunction, 100);
+    });
+
+    function excelFunction() {
+        $(".buttons-excel")[0].click();
+        setTimeout(pdfExcelPrint, 100);
+    }
+
+    //$(document).on('click', '#btnPdf', function () {
+    //    var info = dataTable.page.info();
+    //    pageLength = info.length;
+    //    dataTable.page.len(info.recordsTotal).draw();
+    //    setTimeout(pdfFunction, 100);
+    //});
+
+    //function pdfFunction() {
+    //    $(".buttons-pdf")[0].click();
+    //    setTimeout(pdfExcelPrint, 100);
+    //}
+
+    function myFunction(x) {
+        x.classList.toggle("glyphicon-minus-sign");
+    }
+
+    function createbooking() {
+        $.get("/Booking/Create", { operation: "Create" }, function (res) {
+            $("#bookingmodalbody").html(res);
+            $("#bookingmodal").modal('show');
+        })
+
+    }
+
+    function Savebooking() {
+        var modal = $("#bookingmodal");
+        var form = $('form[name="bookingForm"]');
+        nameValidation();
+        dinningValidation();
+        numberofguestValidation();
+        contactValidation();
+        categoryValidation()
+        form.validate();
+
+        if (!form.valid()) {
+            return;
+        } else {
+            var data = form.serialize();
+            $.post("/Booking/CreateEdit", data, function (res) {
+                if (res) {
+                    toastr.options = {
+                        "closeButton": true,
+                        "newestOnTop": false,
+                        "progressBar": false,
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "200",
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr["success"]("Booking Saved")
+                    modal.modal('hide');
+                    dataTable.ajax.reload(null, false);
+                }
+            })
+        }
+    }
+
+    function nameValidation() {
+        var letters = /^[A-Z a-z]+$/;
+        if (!$("#Customer_Name").val().match(letters) && $("#Customer_Name").val() != "") {
+            $("#nameValidation").html("Please Provide Valid Name");
+
+        }
+        else if ($("#Customer_Name").val() == "") {
+            $("#nameValidation").html("Customer Name Required");
+        }
+        else if ($("#Customer_Name").val().length >= 20) {
+            $("#nameValidation").html("Name must contain only 20 characters");
+        }
+        else if ($("#Customer_Name").val().length <= 2) {
+            $("#nameValidation").html("Please Provide Valid Name");
+        }
+        else {
+            $("#nameValidation").html("");
+        }
+    }
+
+    function dinningValidation() {
+        if ($("#Dinning_Type").val() == "") {
+            $("#dinningValidation").html("Dinning Type Required");
+        }
+        else {
+            $("#dinningValidation").html("");
+        }
+    }
+
+    function numberofguestValidation() {
+        if ($("#NumberofGuest").val() == 0) {
+            $("#numberofguestValidation").html("Number of Guests Required");
+        }
+        else if ($("#NumberofGuest").val() >= 100) {
+            $("#numberofguestValidation").html("Maximum number of guests is 99");
+        }
+        else if ($("#NumberofGuest").val() <= -1) {
+            $("#numberofguestValidation").html("Minimum number of guest is 1");
+        }
+        else {
+            $("#numberofguestValidation").html("");
+        }
+    }
+
+    function contactValidation() {
+        var expression = /^[0-9]+$/;
+        if (!$("#Contact").val().match(expression) && $("#Contact").val() != "") {
+            $("#contactValidation").html("Please Provide Valid Contact Number");
+        }
+        else if ($("#Contact").val() == "") {
+            $("#contactValidation").html("Contact Number is Required");
+        }
+        else if ($("#Contact").val().length >= 11) {
+            $("#contactValidation").html("Contact must contain only 10 characters");
+        }
+        else if ($("#Contact").val().length <= 9) {
+            $("#contactValidation").html("Contact Number Not Valid");
+        }
+        else {
+            $("#contactValidation").html("");
+        }
+    }
+
+    function categoryValidation() {
+        if ($("#Category").val() == "") {
+            $("#categoryValidation").html("Category Required");
+        }
+        else {
+            $("#categoryValidation").html("");
+        }
+    }
+
+    function getDetails(id) {
+        $.get("/Booking/View", { operation: "View", id: id }, function (res) {
+            $('#bookingmodalbody').html(res);
+            $('#bookingmodal').modal('show');
+
+        })
+    }
+
+    function getEditDetails(id) {
+        $.get("/Booking/Edit", { operation: "Edit", id: id }, function (res) {
+            $('#bookingmodalbody').html(res);
+            $('#bookingmodal').modal('show');
+
+        })
+    }
+
+    function getDelete(id) {
+        $.get("/Booking/DeletePartial", { operation: "Delete", id: id }, function (res) {
+            $('#bookingmodalbody1').html(res);
+            $('#bookingmodal1').modal('show');
+        })
+    }
+
+    function Deletebooking(id) {
+        var modal = $("#bookingmodal1");
+        var form = $('form[name="bookingdeleteForm"]');
+        form.validate();
+        if (!form.valid()) {
+            return;
+        } else {
+            var data = form.serialize();
+            $.post("/Booking/Delete", data, function (res) {
+                if (res) {
+                    toastr.options = {
+                        "closeButton": true,
+                        "newestOnTop": false,
+                        "progressBar": true,
+                        "positionClass": "toast-bottom-right",
+                        "preventDuplicates": false,
+                        "onclick": null,
+                        "showDuration": "200",
+                        "hideDuration": "1000",
+                        "timeOut": "3000",
+                        "extendedTimeOut": "1000",
+                        "showEasing": "swing",
+                        "hideEasing": "linear",
+                        "showMethod": "fadeIn",
+                        "hideMethod": "fadeOut"
+                    }
+                    toastr["success"]("Booking Deleted")
+                    modal.modal('hide');
+                    dataTable.ajax.reload(null, false);
+                }
+            })
+        }
+    }
+</script>
+

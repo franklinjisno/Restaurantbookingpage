@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Restaurantbookingpage.Models;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -15,8 +16,8 @@ namespace Restaurantbookingpage
         private void connection()
         {
             //string constring = ConfigurationManager.ConnectionStrings["BookingConn"].ToString();
-            //string constring = "Data Source=LAPTOP-5IQ1TLRU;Initial Catalog=BookingpageDB;Integrated Security=True";
-            string constring = "Data Source=ASUSX515;Initial Catalog=BookingpageDB;Integrated Security=True";
+            //string constring = "Data Source=LAPTOP-5IQ1TLRU;Initial Catalog=Bookingpage;Integrated Security=True";
+            string constring = "Data Source=ASUSX515;Initial Catalog=Bookingpage;Integrated Security=True";
             con = new SqlConnection(constring);
         }
 
@@ -31,6 +32,12 @@ namespace Restaurantbookingpage
             cmd.Parameters.AddWithValue("@Datetime", smodel.Datetime);
             cmd.Parameters.AddWithValue("@Dinning_Type", smodel.Dinning_Type);
             cmd.Parameters.AddWithValue("@NumberofGuest", smodel.NumberofGuest);
+            cmd.Parameters.AddWithValue("@Category", smodel.Category);
+            cmd.Parameters.AddWithValue("@Contact", smodel.Contact);
+            cmd.Parameters.AddWithValue("@CreatedBy", smodel.CreatedBy);
+            cmd.Parameters.AddWithValue("@CreatedDate", smodel.CreatedDate);
+            cmd.Parameters.AddWithValue("@ModifiedBy", smodel.ModifiedBy);
+            cmd.Parameters.AddWithValue("@ModifiedDate", smodel.ModifiedDate);
 
             con.Open();
             int i = cmd.ExecuteNonQuery();
@@ -74,7 +81,12 @@ namespace Restaurantbookingpage
                             Dinning_Type = Convert.ToString(dr["Dinning_Type"]),
                             NumberofGuest = Convert.ToInt32(dr["NumberofGuest"]),
                             Contact = Convert.ToString(dr["Contact"]),
-                            Category = Convert.ToString(dr["Category"])
+                            Category = Convert.ToString(dr["Category"]),
+                             CreatedBy = Convert.ToString(dr["CreatedBy"]),
+                            CreatedDate = Convert.ToString(dr["CreatedDate"]),
+                            ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                            ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
+
                         });
                 }
             }
@@ -82,6 +94,51 @@ namespace Restaurantbookingpage
                 {
                     throw;
                 }
+            return bookingList;
+        }
+        public List<Registration> GetAccount(int pageIndex, int pageSize, string searchValue)
+        {
+
+            connection();
+            List<Registration> bookingList = new List<Registration>();
+
+            SqlCommand cmd = new SqlCommand("GetAccountUser", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@pageIndex", pageIndex);
+            cmd.Parameters.AddWithValue("@pageSize", pageSize);
+            //cmd.Parameters.AddWithValue("@searchValue", searchValue);
+            SqlDataAdapter sd = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+
+            try
+            {
+                con.Open();
+                sd.Fill(dt);
+                con.Close();
+
+                foreach (DataRow dr in dt.Rows)
+                {
+                    bookingList.Add(
+                        new Registration
+                        {
+                            Id = Convert.ToInt32(dr["Id"]),
+                            Name = Convert.ToString(dr["Name"]),
+                            Email = Convert.ToString(dr["Email"]),
+                            Password = Convert.ToString(dr["Password"]),
+                            ContactNo = Convert.ToString(dr["ContactNo"]),
+                            CreatedBy = Convert.ToString(dr["CreatedBy"]),
+                            CreatedDate = Convert.ToString(dr["CreatedDate"]),
+                            ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                            ModifiedDate = Convert.ToString(dr["ModifiedDate"])
+
+                        });
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+                throw;
+            }
             return bookingList;
         }
         public List<Booking> GetBookings()
@@ -106,8 +163,15 @@ namespace Restaurantbookingpage
                         Id = Convert.ToInt32(dr["Id"]),
                         Customer_Name = Convert.ToString(dr["Customer_Name"]),
                         Datetime = Convert.ToDateTime(dr["Datetime"]),
+                        Contact = Convert.ToString(dr["Contact"]),
+                        Category = Convert.ToString(dr["Category"]),
                         Dinning_Type = Convert.ToString(dr["Dinning_Type"]),
-                        NumberofGuest = Convert.ToInt32(dr["NumberofGuest"])
+                        NumberofGuest = Convert.ToInt32(dr["NumberofGuest"]),
+                        CreatedBy = Convert.ToString(dr["CreatedDate"]),
+                        CreatedDate = Convert.ToString(dr["CreatedDate"]),
+                        ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                        ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
+
                     });
             }
             return Bookinglist;
@@ -139,7 +203,12 @@ namespace Restaurantbookingpage
                             Dinning_Type = Convert.ToString(dr["Dinning_Type"]),
                             NumberofGuest = Convert.ToInt32(dr["NumberofGuest"]),
                             Contact = Convert.ToString(dr["Contact"]),
-                            Category = Convert.ToString(dr["Category"])
+                            Category = Convert.ToString(dr["Category"]),
+                             CreatedBy = Convert.ToString(dr["CreatedDate"]),
+                            CreatedDate = Convert.ToString(dr["CreatedDate"]),
+                            ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                            ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
+
                         });
                 }
             }
@@ -154,11 +223,14 @@ namespace Restaurantbookingpage
             cmd.Parameters.AddWithValue("@Id", smodel.Id);
             cmd.Parameters.AddWithValue("@Customer_Name", smodel.Customer_Name);
             cmd.Parameters.AddWithValue("@Datetime", smodel.Datetime);
+            cmd.Parameters.AddWithValue("@Category", smodel.Category);
             cmd.Parameters.AddWithValue("@Dinning_Type", smodel.Dinning_Type);
             cmd.Parameters.AddWithValue("@NumberofGuest", smodel.NumberofGuest);
             cmd.Parameters.AddWithValue("@Contact", smodel.Contact);
-            cmd.Parameters.AddWithValue("@Category", smodel.Category);
-
+            cmd.Parameters.AddWithValue("@CreatedBy", smodel.CreatedBy);
+            cmd.Parameters.AddWithValue("@CreatedDate", smodel.CreatedDate);
+            cmd.Parameters.AddWithValue("@ModifiedBy", smodel.ModifiedBy);
+            cmd.Parameters.AddWithValue("@ModifiedDate", smodel.ModifiedDate);
             con.Open();
             int i = cmd.ExecuteNonQuery();
             con.Close();
@@ -235,7 +307,14 @@ namespace Restaurantbookingpage
                             Dinning_Type = Convert.ToString(dr["Dinning_Type"]),
                             NumberofGuest = Convert.ToInt32(dr["NumberofGuest"]),
                             Contact = Convert.ToString(dr["Contact"]),
-                            Category = Convert.ToString(dr["Category"])
+                            Category = Convert.ToString(dr["Category"]),
+                            CreatedBy = Convert.ToString(dr["CreatedDate"]),
+                            CreatedDate = Convert.ToString(dr["CreatedDate"]),
+                            ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                            ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
+
+
+
                         });
                 }
             }

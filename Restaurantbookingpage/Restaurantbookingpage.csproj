@@ -470,6 +470,7 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Accountdbhandle.cs" />
     <Compile Include="Models\Booking.cs" />
     <Compile Include="Models\Bookingdbhandle.cs" />
     <Compile Include="Models\Login.cs" />
@@ -494,9 +495,13 @@
     <Content Include="Scripts\popper.js.map" />
     <Content Include="Scripts\popper-utils.min.js.map" />
     <Content Include="Scripts\popper-utils.js.map" />
-    <Content Include="Views\Account\Index.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
+    <Content Include="Views\Account\Index.cshtml" />
+    <Content Include="Views\Account\_DeletePartial.cshtml" />
+    <Content Include="Views\Account\_OperationPartial.cshtml" />
+    <Content Include="Views\Account\_PrintView.cshtml" />
+    <Content Include="Views\Booking\List.cshtml" />
+    <Content Include="Views\Account\UserInfo.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31424.327
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.32126.317
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Restaurantbookingpage", "Restaurantbookingpage\Restaurantbookingpage.csproj", "{A955E9A8-E850-4933-8AA9-59AECA736D20}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bookingwebapi", "Bookingwebapi\Bookingwebapi.csproj", "{0A785732-ABE4-4C2E-9B1B-64A832E773C3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BookingClass", "BookingClass\BookingClass.csproj", "{0DAA9084-5406-4D54-9E1D-9F3C3E785E95}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantWebAPI", "RestaurantWebAPI\RestaurantWebAPI.csproj", "{BE73FBB1-C193-43AD-B1EF-77824FB6FEF8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{0DAA9084-5406-4D54-9E1D-9F3C3E785E95}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0DAA9084-5406-4D54-9E1D-9F3C3E785E95}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0DAA9084-5406-4D54-9E1D-9F3C3E785E95}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE73FBB1-C193-43AD-B1EF-77824FB6FEF8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE73FBB1-C193-43AD-B1EF-77824FB6FEF8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE73FBB1-C193-43AD-B1EF-77824FB6FEF8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE73FBB1-C193-43AD-B1EF-77824FB6FEF8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

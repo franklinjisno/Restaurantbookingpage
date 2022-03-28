@@ -1,0 +1,179 @@
+{
+	"info": {
+		"_postman_id": "64776325-a956-4558-9f08-50ed817ddd49",
+		"name": "RestaurantBooking",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "https://localhost:44314/api/Account",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://localhost:44314/api/Account/AccountData?start=1&length=10&searchValue=A",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44314",
+					"path": [
+						"api",
+						"Account",
+						"AccountData"
+					],
+					"query": [
+						{
+							"key": "start",
+							"value": "1"
+						},
+						{
+							"key": "length",
+							"value": "10"
+						},
+						{
+							"key": "searchValue",
+							"value": "A"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\"id\":1}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44314/api/Account/GetById?id=61",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44314",
+					"path": [
+						"api",
+						"Account",
+						"GetById"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "61"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Name\":\"Deepak\",\r\n    \"Email\":\"deepak@gmail.com\",\r\n    \"Password\":\"password\",\r\n    \"ContactNo\":\"9090909090\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44314/api/Account/Register",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44314",
+					"path": [
+						"api",
+						"Account",
+						"Register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Id\":64,\r\n    \"Name\":\"Deepaks\",\r\n    \"Email\":\"deepak@gmail.com\",\r\n    \"Password\":\"password\",\r\n    \"ContactNo\":\"9090909090\"\r\n\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "https://localhost:44314/api/Account/EditUser",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44314",
+					"path": [
+						"api",
+						"Account",
+						"EditUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "https://localhost:44314/api/Account/Delete?Id=64",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "44314",
+					"path": [
+						"api",
+						"Account",
+						"Delete"
+					],
+					"query": [
+						{
+							"key": "Id",
+							"value": "64"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "New Request",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

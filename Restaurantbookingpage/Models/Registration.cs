@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.ComponentModel.DataAnnotations;
+using BookingClass.Enum;
 
 namespace Restaurantbookingpage.Models
 {
@@ -31,5 +32,10 @@ namespace Restaurantbookingpage.Models
         [StringLength(150, MinimumLength = 6)]
         [Display(Name = "Password: ")]
         public string Password { get; set; }
+        public string CreatedBy { get; set; }
+        public string CreatedDate { get; set; }
+        public string ModifiedBy { get; set; }
+        public string ModifiedDate { get;  set; }
+        public Actions Actions { get;  set; }
     }
 }
