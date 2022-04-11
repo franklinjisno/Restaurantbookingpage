@@ -1,12 +1,13 @@
-﻿<div>
-    <input type="button" value="View Booking" style="background-color: ghostwhite; margin-bottom: -35px;" onclick="location.href='@Url.Action("List", "Booking")'" />
+﻿
+<div>
+    <input type="button" value=" View Dashboard" style="background-color: ghostwhite; margin-bottom: -35px;" onclick="location.href='@Url.Action("List", "Account")'" />
 
 </div>
 <div>
     <div style=" margin-bottom: 6px;">
         <button type="button" class="btn btn-info btn-check" style=" margin-bottom: -33px;" onclick="createaccount()">Register </button>
         <div class="btn-group">
-            <button type="button" title="Print" class="btn btn-danger" style="margin-top: 31px"; margin-bottom: auto; div-print-buttons" onclick="printall()">Print</button>
+            <button type="button" title="Print" class="btn btn-danger" style="margin-top: 31px" ; margin-bottom: auto; div-print-buttons" onclick="printall()">Print</button>
             <button type="button" class="btn btn-danger dropdown-toggle dropdown-toggle-split btn-height" style=" margin-top: 31px;" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <span class="glyphicon glyphicon-chevron-down icon-size"></span>
             </button>
@@ -22,7 +23,7 @@
     </div>
 </div>
 
-<button type="button" class="btn" style="background-color: #aba6a6; width: 80px; margin-left: 94%;  margin-top: -8%; color: white;" onclick="Logout()">LogOut</button>
+<button type="button" class="btn" style="background-color: #aba6a6; width: 80px; margin-left: 94%; margin-top: -8%; color: white; background-color: #565151;" onclick="Logout()">LogOut</button>
 
 
 
@@ -38,15 +39,15 @@
             <th style="text-align:center">
                 Email
             </th>
-            @*<th style="text-align:center">
-                    Password
-                </th>*@
+            
             <th style="text-align:center">
                 ContactNo
             </th>
             <th style="text-align:center">
                 Action
             </th>
+           
+
         </tr>
     </thead>
 
@@ -81,14 +82,14 @@
     </div>
 </div>
 
-<iframe name="print_frames" width="0" height="0" frameborder="0" src="~/PDF/user.pdf"></iframe>
+<iframe name="print_frames" width="0" height="0" frameborder="0" src="~/PDF/users.pdf"></iframe>
 
 <script>
     function format(d) {
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
             '<tr>' +
             '<td>CreatedBy:</td>' +
-            '<td>' + d.CreatedBy + '</td>' +
+            '<td>' + d.CreatedByName + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td>CreatedDate:</td>' +
@@ -96,7 +97,7 @@
             '</tr>' +
             '<tr>' +
             '<td>ModifiedBy:</td>' +
-            '<td>' + d.ModifiedBy + '</td>' +
+            '<td>' + d.ModifiedByName + '</td>' +
             '</tr>' +
             '<td>ModifiedDate:</td>' +
             '<td>' + d.ModifiedDate + '</td>'
@@ -120,7 +121,7 @@
                     {
                         extend: 'excel',
                         exportOptions: {
-                            columns: [1, 2, 3, 4, 5, 6,7]
+                            columns: [1, 2, 3, 4, 5, 6, 7]
                         }
                     }
                 ],
@@ -137,7 +138,7 @@
                         targets: 0
                     },
 
-                    { "targets": [2,3,4], orderable: false }
+                    { "targets": [2, 3, 4], orderable: false }
                 ],
 
 
@@ -159,25 +160,14 @@
 
                     { "data": "Name" },
 
-                    //{
-                    //    "data": "Datetime",
-                    //    "type": "shortdatetime",
-                    //    "render": function (value) {
-                    //        if (value === null) return "";
-                    //        var pattern = /Date\(([^)]+)\)/;
-                    //        var results = pattern.exec(value);
-                    //        var dt = new Date(parseFloat(results[1]));
-                    //        return dt.getDate() + "/" + (dt.getMonth() + 1) + "/" + dt.getFullYear()
-                    //    }
-                    //},
-
+                   
                     { "data": "Email" },
 
-                    //{ "data": "Password" },
+                  
 
                     { "data": "ContactNo" },
+                   
 
-                  
 
 
                     {
@@ -190,18 +180,15 @@
 
 
             });
-        $('#UserTable tbody').on('click', 'td.dt-control', function ()
-        {
+        $('#UserTable tbody').on('click', 'td.dt-control', function () {
             var tr = $(this).closest('tr');
             var row = dataTable.row(tr);
 
-            if (row.child.isShown())
-            {
+            if (row.child.isShown()) {
                 row.child.hide();
                 tr.removeClass('shown');
             }
-            else
-            {
+            else {
                 row.child(format(row.data())).show();
                 tr.addClass('shown');
             }
@@ -229,17 +216,7 @@
         })
     }
 
-    //$(document).on('click', '#btnPrint', function () {
-    //    var info = dataTable.page.info();
-    //    pageLength = info.length;
-    //    dataTable.page.len(info.recordsTotal).draw();
-    //    setTimeout(printFunction, 100);
-    //});
-
-    //function printFunction() {
-    //    $(".buttons-print")[0].click()
-    //    setTimeout(pdfExcelPrint, 100);
-    //}
+  
     function pdfExcelPrint() {
         dataTable.page.len(pageLength).draw();
     }
@@ -256,17 +233,7 @@
         setTimeout(pdfExcelPrint, 100);
     }
 
-    //$(document).on('click', '#btnPdf', function () {
-    //    var info = dataTable.page.info();
-    //    pageLength = info.length;
-    //    dataTable.page.len(info.recordsTotal).draw();
-    //    setTimeout(pdfFunction, 100);
-    //});
-
-    //function pdfFunction() {
-    //    $(".buttons-pdf")[0].click();
-    //    setTimeout(pdfExcelPrint, 100);
-    //}
+   
 
     function myFunction(x) {
         x.classList.toggle("glyphicon-minus-sign");
@@ -285,7 +252,6 @@
         var form = $('form[name="accountForm"]');
         nameValidation();
         contactValidation();
-        /*emailValidation();*/
         passwordValidation();
         if (!form.valid()) {
             return;
@@ -322,7 +288,6 @@
         var form = $('form[name="accountForm"]');
         nameValidation();
         contactValidation();
-       /* emailValidation();*/
         passwordValidation();
 
         if (!form.valid()) {
@@ -378,21 +343,6 @@
     }
 
 
-    //function emailValidation() {
-
-    //    if ($("#Email").val() == "") {
-    //        $("#emailValidation").html(" Email Required");
-    //    }
-    //    else if ($("#Email").val().length >= 30) {
-    //        $("#emailValidation").html("Email must contain only 30 characters");
-    //    }
-    //    else if ($("#Email").val().length <= 15) {
-    //        $("#emailValidation").html("Please Provide Valid Email");
-    //    }
-    //    else {
-    //        $("#emailValidation").html("");
-    //    }
-    //}
 
 
     function passwordValidation() {
@@ -434,14 +384,7 @@
         }
     }
 
-    //function categoryValidation() {
-    //    if ($("#Category").val() == "") {
-    //        $("#categoryValidation").html("Category Required");
-    //    }
-    //    else {
-    //        $("#categoryValidation").html("");
-    //    }
-    //}
+    
     function Logout() {
         $.get("/Account/LogOut");
         location.reload();
@@ -463,30 +406,23 @@
         })
     }
 
-    function getDelete(id)
-    {
-        $.get("/Account/DeletePartial", { operation: "Delete", id: id }, function (res)
-        {
+    function getDelete(id) {
+        $.get("/Account/DeletePartial", { operation: "Delete", id: id }, function (res) {
             $('#accountmodalbody1').html(res);
             $('#accountmodal1').modal('show');
         })
     }
 
-    function Deleteaccount(id)
-    {
+    function Deleteaccount(id) {
         var modal = $("#accountmodal1");
         var form = $('form[name="accountdeleteForm"]');
         form.validate();
-        if (!form.valid())
-        {
+        if (!form.valid()) {
             return;
-        } else
-        {
+        } else {
             var data = form.serialize();
-            $.post("/Account/Delete", data, function (res)
-            {
-                if (res)
-                {
+            $.post("/Account/Delete", data, function (res) {
+                if (res) {
                     toastr.options =
                     {
                         "closeButton": true,

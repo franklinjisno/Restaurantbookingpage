@@ -11,13 +11,13 @@ namespace Restaurantbookingpage.Models
         [Required]
         [EmailAddress]
         [StringLength(150)]
-        [Display(Name = "Email Address: ")]
+        [Display(Name = "Email ")]
         public string Email { get; set; }
 
         [Required]
         [DataType(DataType.Password)]
         [StringLength(150, MinimumLength = 6)]
-        [Display(Name = "Password: ")]
+        [Display(Name = "Password ")]
         public string Password { get; set; }
     }
 }

@@ -5,35 +5,39 @@
     ViewBag.Title = "Login";
 }
 
-<h2 style="padding-left: 13px";>Login</h2>
-<div class="row">
-    <div class="col-md-8">
-        <section id="loginForm">
-            @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
-            {
-                @Html.AntiForgeryToken()
-                
-                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10" style=" width: 351px;">
-                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+    <h2 style=" padding-left: 610px; padding-bottom: 15px;" ;>Login</h2>
+    <div class="row">
+        <div class="col-md-8">
+            <section id="loginForm">
+                @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    @Html.ValidationSummary(true, "", new { style = "margin-left:489px;", @class = "text-danger" })
+                    <div class="form-horizontal">
+                        @Html.LabelFor(m => m.Email, new { style = "margin-left:364px;", @class = "col-md-2 control-label" })
+                        <div class="col-md-10" style=" width: 374px;">
+                            @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                    <div class="col-md-10" style=" width: 351px;" >
-                        @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
-                        @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                    <div class="form-horizontal">
+                        @Html.LabelFor(m => m.Password, new { style = "margin-left:364px; margin-top:23px;", @class = "col-md-2 control-label" })
+
+                        <div class="col-md-10" style=" width:377px;">
+                            @Html.PasswordFor(m => m.Password, new { style = "margin-top:23px;", @class = "form-control" })
+                            @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="col-md-offset-2 col-md-10">
-                        <input type="submit" value="Login" class="btn btn-success" />
+                    <div class="form-horizontal">
+                        <div class="col-md-offset-2 col-md-10">
+                            <input type="submit" value="Login" style="margin-left: 365px; margin-top:13px; " class="btn btn-success" />
+                        </div>
                     </div>
-                </div>
-            }
-        </section>
+                    <div>
+                        <a href="/Account/ForgotPassword" style="margin-left: 600px;">Forget password?</a>
+                    </div>
+                }
+            </section>
+        </div>
     </div>
-</div>

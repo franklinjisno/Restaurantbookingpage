@@ -1,5 +1,5 @@
 ﻿<div>
-    <input type="button" value="View User" style="background-color: ghostwhite; margin-bottom: -35px;" onclick="location.href='@Url.Action("Index", "Account")'" />
+    <input type="button" value="View Dashboard" style="background-color: ghostwhite; margin-bottom: -35px;" onclick="location.href='@Url.Action("List", "Account")'" />
 
 </div>
 <div>
@@ -21,7 +21,7 @@
 
     </div>
 </div>
-<button type="button" class="btn" style="background-color: #aba6a6; width: 80px; margin-left: 94%;  margin-top: -8%; color: white;" onclick="Logout()">LogOut</button>
+<button type="button" class="btn" style="background-color: #aba6a6; width: 80px; margin-left: 94%; margin-top: -8%; color: white; background-color: #565151;" onclick="Logout()">LogOut</button>
 
 
 
@@ -112,7 +112,7 @@
         return '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
             '<tr>' +
             '<td>CreatedBy:</td>' +
-            '<td>' + d.CreatedBy + '</td>' +
+            '<td>' + d.CreatedByName + '</td>' +
             '</tr>' +
             '<tr>' +
             '<td>CreatedDate:</td>' +
@@ -120,7 +120,7 @@
             '</tr>' +
             '<tr>' +
             '<td>ModifiedBy:</td>' +
-            '<td>' + d.ModifiedBy + '</td>' +
+            '<td>' + d.ModifiedByName + '</td>' +
             '</tr>' +
             '<td>ModifiedDate:</td>' +
             '<td>' + d.ModifiedDate + '</td>'

@@ -11,11 +11,14 @@ using System.Text;
 using ArrayToPdf;
 using System.Data;
 using Restaurantbookingpage.Models;
+using System.Data.SqlClient;
 
 namespace Restaurantbookingpage.Controllers
 {
     public class BookingController : Controller
     {
+        SqlConnection con = new SqlConnection("Data Source=ASUSX515;Initial Catalog=Bookingpage;Integrated Security=True");
+
         // View Bookings
         [Authorize]
         public ActionResult Index()
@@ -111,14 +114,21 @@ namespace Restaurantbookingpage.Controllers
         {
             Bookingdbhandle objdbhandle = new Bookingdbhandle();
             objbooking.Datetime = DateTime.Now;
-                if (objbooking.Id > 0)
+            var AdUser = User.Identity.Name;
+            var admin = GetUserByName(AdUser);
+            if(admin.Id==0)
+            {
+                admin=objdbhandle.GetUsersByName(AdUser);
+            }
+
+            if (objbooking.Id > 0)
                 {
                 bool authenticated = Request.IsAuthenticated;
-                var AdUser = User.Identity.Name;
-                objbooking.CreatedBy = AdUser;
-                objbooking.ModifiedBy = AdUser;
+
+              objbooking.ModifiedByName=User.Identity.Name;
+                objbooking.ModifiedBy = admin.Id;
                 objbooking.ModifiedDate = DateTime.Now.ToString();
-                objbooking.CreatedDate = DateTime.Now.ToString();
+            
                 
                     objdbhandle.UpdateDetails(objbooking);
                     return Json(true, JsonRequestBehavior.AllowGet);
@@ -126,16 +136,58 @@ namespace Restaurantbookingpage.Controllers
                 else
                 {
                 bool authenticated = Request.IsAuthenticated;
-                var AdUser = User.Identity.Name;
-                objbooking.CreatedBy = AdUser;
-                objbooking.ModifiedBy = AdUser;
-                objbooking.ModifiedDate = DateTime.Now.ToString();
+                objbooking.CreatedBy = admin.Id;
+                objbooking.CreatedByName = User.Identity.Name;
                 objbooking.CreatedDate= DateTime.Now.ToString();
                 objdbhandle.UpdateDetails(objbooking);
                     return Json(true, JsonRequestBehavior.AllowGet);
                 }
            
         }
+
+        public Registration GetUserByName(string Email)
+        {
+
+
+
+            Registration user = new Registration();
+            SqlCommand cmd = new SqlCommand("GetUserByName", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Email", Email);
+            SqlDataAdapter sd = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            con.Open();
+            try
+            {
+
+                if (con.State == ConnectionState.Open)
+                {
+                    sd.Fill(dt);
+                    con.Close();
+                    if (dt.Rows.Count > 0)
+                    {
+                        user.Id = Convert.ToInt32(dt.Rows[0]["Id"]);
+                        user.Name = Convert.ToString(dt.Rows[0]["Name"]);
+                        user.Email = Convert.ToString(dt.Rows[0]["Email"]);
+                        user.Password = Convert.ToString(dt.Rows[0]["Password"]);
+                        user.ContactNo = Convert.ToString(dt.Rows[0]["ContactNo"]);
+                        user.CreatedBy = Convert.ToInt32(dt.Rows[0]["CreatedBy"]);
+                        user.CreatedDate = Convert.ToString(dt.Rows[0]["CreatedDate"]);
+                        user.ModifiedBy = Convert.ToInt32(dt.Rows[0]["ModifiedBy"]);
+                        user.ModifiedDate = Convert.ToString(dt.Rows[0]["ModifiedDate"]);
+                        user.Deleted = Convert.ToInt32(dt.Rows[0]["Deleted"]);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+            }
+            return user;
+        }
+
+
 
         // Delete Booking
         public ActionResult DeletePartial(string operation, int id)
@@ -185,7 +237,7 @@ namespace Restaurantbookingpage.Controllers
                 table.Rows.Add(booking.Customer_Name,booking.Datetime.Date, booking.Dinning_Type,booking.NumberofGuest,booking.Contact,booking.Category);
 
             var pdf = table.ToPdf();
-            System.IO.File.WriteAllBytes(@"C:/Users/91623/Desktop/Demo/Restaurantbookingpage/Restaurantbookingpage/PDF/result.pdf", pdf);
+            System.IO.File.WriteAllBytes(@"C:/Users/91623/Desktop/Demo/Restaurantbookingpage/Restaurantbookingpage/PDF/bookings.pdf", pdf);
 
             return PartialView("_PrintView");
             

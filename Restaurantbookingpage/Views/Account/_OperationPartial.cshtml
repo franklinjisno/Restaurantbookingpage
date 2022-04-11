@@ -5,47 +5,16 @@
 }
 
 <form name="accountForm">
-    <div class="modal-header" style="padding-left:35%">
+    <div class="modal-header" style="padding-left: 35%; background-color: #1d8b96; ">
         <h4 class="modal-title">
             <span><b id="titlename"> </b></span>
             <button type="button" class="close" style="" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
         </h4>
     </div>
     @Html.AntiForgeryToken()
-<div class="modal-body">
+<div class="modal-body" style="background-color: whitesmoke;">
     @Html.HiddenFor(model => model.Id)
-
-    @*<div class="form-group">
-                @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
-                <div class="col-md-10" style="width: 360px" ;>
-                    @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Name, new { @class = "col-md-2 control-label" })
-                <div class="col-md-10" style="width: 360px" ;>
-                    @Html.TextBoxFor(m => m.Name, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
-
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.ContactNo, "ContactNo:", new { @class = "col-md-2 control-label" })
-                <div class="col-md-10" style="width: 360px" ;>
-                    @Html.TextBoxFor(m => m.ContactNo, new { @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.ContactNo, "", new { @class = "text-danger" })
-
-                </div>
-            </div>
-            <div class="form-group">
-                @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
-                <div class="col-md-10" style="width: 360px" ;>
-                    @Html.TextBoxFor(m => m.Password, new { @type = "password", @Value = Model.Password, @class = "form-control" })
-                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
-                </div>
-            </div>
-        </div>*@
+  
     <div class="row">
         <div class="col-md-auto">
             <div class="form-group" style="padding-left: 20px">
@@ -64,37 +33,39 @@
                 </div>
             </div>
 
-            @*<div class="form-group" style="padding-left: 20px">
-            <h5><b>Password</b></h5>
-            <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                @Html.EditorFor(model => model.Password, new { htmlAttributes = new { @Id = "Password", @class = "form-control", @onkeyup = "nameValidation()" } })
-                <small style="position:absolute">@Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger", @Id = "nameValidation" })</small>
-            </div>
-        </div>*@
-        <div class="form-group" style="padding-left:20px">
-            <h5><b>Password</b></h5>
-            <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                    @Html.TextBoxFor(model => model.Password, new { @type = "password", @Value = Model.Password, @class = "form-control" ,@onkeyup = "passwordValidation()" })
-                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" , @Id = "passwordValidation" })
+            <div class="form-group" style="padding-left:20px">
+                <h5><b>Password</b></h5>
+                <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
+                    @Html.TextBoxFor(model => model.Password, new { @type = "password", @Value = Model.Password, @class = "form-control" })
+                    @Html.ValidationMessageFor(m => m.Password, "", new { @class = "text-danger" })
                 </div>
             </div>
+
 
             <div class="form-group" style="padding-left: 20px">
-                <h5><b>ContactNo</b></h5>
+                <h5><b>Contact No</b></h5>
                 <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                    @Html.EditorFor(model => model.ContactNo, new { htmlAttributes = new { @Id = "ContactNo", @class = "form-control", @onkeyup = "contactValidation()" } })
-                    <small style="position:absolute">@Html.ValidationMessageFor(model => model.ContactNo, "", new { @class = "text-danger", @Id = "contactValidation" })</small>
+                    @Html.EditorFor(model => model.ContactNo, new { htmlAttributes = new { @Id = "ContactNo", @class = "form-control" } })
+                    <small style="position:absolute">@Html.ValidationMessageFor(model => model.ContactNo, "", new { @class = "text-danger" })</small>
                 </div>
             </div>
-        </div>
+            <div class="form-group" style="padding-left: 20px;" id="EmployeePassword">
+                <h5><b>Isadmin</b></h5>
+                <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
+                    @Html.EditorFor(model => model.Isadmin, "Is Admin", new { htmlAttributes = new { @class = "disable" } })
+                    @Html.ValidationMessageFor(model => model.Isadmin, "", new { @class = "text-danger" })
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
 
-        <div class="modal-footer">
-            <button type="button" class="btn btn-sm pull-right" data-dismiss="modal">Cancel</button>
-            <button type="button" id="saveclick" onclick="Saveaccount()" class="btn btn-sm btn-success pull-right">Save</button>
-            <button type="button" id="editclick" onclick="enableedit()" class="btn btn-sm btn-warning pull-right">Edit</button>
-            <button type="button" id="savechange" onclick="savechanges()" class="btn btn-sm btn-warning pull-right">SaveChanges</button>
+        <div class="modal-footer"style="background-color: #242a2a;">
+            <button type="button" class="btn btn-sm pull-right" style=" margin-top: 0px; margin-bottom: -2px;" data-dismiss="modal">Cancel</button>
+            <button type="button" id="saveclick" onclick="Saveaccount()" style="padding-left: 24px;margin-right: 8px;margin-bottom: -84px;margin-top: 0px;" class="btn btn-sm btn-success pull-right">Save</button>
+            <button type="button" id="editclick" onclick="enableedit()"  style="padding-left: 24px;margin-right: 8px;margin-bottom: -84px;margin-top: 0px;" class="btn btn-sm btn-warning pull-right">Edit</button>
+            <button type="button" id="savechange" onclick="savechanges()" style="padding-left: 24px;margin-right: 8px;margin-bottom: -84px;margin-top: 0px;" class="btn btn-sm btn-success pull-right">Save</button>
 
         </div>
 </form>
@@ -107,6 +78,8 @@
             $('.form-control').attr('disabled', true);
             $("#saveclick").hide();
             $("#savechange").hide();
+            $("#EmployeePassword").hide();
+
 
         }
         if (operation == '@Actions.Create') {
@@ -114,7 +87,7 @@
             $('.form-control').attr('disabled', false);
             $("#editclick").hide();
             $("#savechange").hide();
-
+           
 
         }
         if (operation == '@Actions.Edit') {
@@ -122,6 +95,8 @@
              $('.form-control').attr('disabled', false);
             $("#editclick").hide();
             $("#saveclick").hide();
+            $("#EmployeePassword").hide();
+
         }
        
     });

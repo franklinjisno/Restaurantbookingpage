@@ -12,84 +12,81 @@
         </h4>
     </div>
     @Html.AntiForgeryToken()
-    <div class="modal-body">
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        @Html.HiddenFor(c => c.Id)
-        <div class="row">
-            <div class="col-md-auto">
-                <div class="form-group" style="padding-left: 20px">
-                    <h5><b>Customer Name</b></h5>
-                    <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        @Html.EditorFor(model => model.Customer_Name, new { htmlAttributes = new { @Id = "Customer_Name", @class = "form-control", @onkeyup="nameValidation()" } })
-                        <small style="position:absolute">@Html.ValidationMessageFor(model => model.Customer_Name, "", new { @class = "text-danger", @Id = "nameValidation" })</small>
-                    </div>
+<div class="modal-body">
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(c => c.Id)
+    @Html.HiddenFor(model => model.CreatedBy)
+    @Html.HiddenFor(model => model.CreatedDate)
+
+    <div class="row">
+        <div class="col-md-auto">
+            <div class="form-group" style="padding-left: 20px">
+                <h5><b>Customer Name</b></h5>
+                <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
+                    @Html.EditorFor(model => model.Customer_Name, new { htmlAttributes = new { @Id = "Customer_Name", @class = "form-control", @onkeyup = "nameValidation()" } })
+                    <small style="position:absolute">@Html.ValidationMessageFor(model => model.Customer_Name, "", new { @class = "text-danger", @Id = "nameValidation" })</small>
                 </div>
-
-                @*<div class="form-group" style="padding-left: 20px; margin-top: 5%;">
-                    <h5><b>Date Time</b></h5>
-                    <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        @Html.EditorFor(model => model.Datetime, new { htmlAttributes = new { @type = "date", @id = "Datetime", @Value = Model.Datetime.ToString("yyyy/MM/dd"), @min = DateTime.Today.ToString("yyyy/MM/dd"), @class = "form-control" } })
-                        <small style="position:absolute">@Html.ValidationMessageFor(model => model.Datetime, "", new { @class = "text-danger", @Id = "dateValidation" })</small>
-                    </div>
-                </div>*@
-
-                <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
-                    <h5><b>Dinning Type</b></h5>
-                    <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        <select class="form-control" name="Dinning_Type" id="Dinning_Type" onchange="dinningValidation()">
-                            @if (TempData["Dinning Type"] != null)
-        {
-            <option value=@TempData["Dinning Type"]>@TempData["Dinning Type"]</option>
-        }
-                            <option value="">--Select--</option>
-                            <option value="Indoor">Indoor</option>
-                            <option value="Outdoor">Outdoor</option>
-                            <option value="Terrace">Terrace</option>
-                        </select>
-                        <small style="position:absolute">@Html.ValidationMessageFor(model => model.Dinning_Type, "", new { @class = "text-danger", @Id = "dinningValidation" })</small>
-                    </div>
-                </div>
-
-                <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
-                    <h5><b>Number of Guests</b></h5>
-                    <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        @Html.EditorFor(model => model.NumberofGuest, new { htmlAttributes = new { @Id = "NumberofGuest", @class = "form-control", @onkeyup = "numberofguestValidation()" } })
-                        <small style="position:absolute">@Html.ValidationMessageFor(model => model.NumberofGuest, "", new { @class = "text-danger", @Id = "numberofguestValidation" })</small>
-                    </div>
-                </div>
-
-                <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
-                    <h5><b>Contact</b></h5>
-                    <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        @Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @Id = "Contact", @class = "form-control", @onkeyup = "contactValidation()" } })
-                        <small style="position:absolute">@Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger", @Id = "contactValidation" })</small>
-                    </div>
-                </div>
-
-                <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
-                    <h5><b>Category</b></h5>
-                    <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
-                        <select class="form-control" name="Category" id="Category" onchange="categoryValidation()">
-                            @if (TempData["Category"] != null)
-        {
-            <option value=@TempData["Category"]>@TempData["Category"]</option>
-        }
-                            <option value="">--Select--</option>
-                            <option value="Vegetarian">Vegetarian</option>
-                            <option value="Non-Vegetarian">Non-Vegetarian</option>
-                            <option value="Vegan">Vegan</option>
-                        </select>
-                        <small style="position:absolute">@Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger", @Id = "categoryValidation" })</small>
-                    </div>
-                </div>
-
             </div>
+
+            
+
+            <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
+                <h5><b>Dinning Type</b></h5>
+                <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
+                    <select class="form-control" name="Dinning_Type" id="Dinning_Type" onchange="dinningValidation()">
+                        @if (TempData["Dinning Type"] != null)
+                        {
+                            <option value=@TempData["Dinning Type"]>@TempData["Dinning Type"]</option>
+                        }
+                        <option value="">--Select--</option>
+                        <option value="Indoor">Indoor</option>
+                        <option value="Outdoor">Outdoor</option>
+                        <option value="Terrace">Terrace</option>
+                    </select>
+                    <small style="position:absolute">@Html.ValidationMessageFor(model => model.Dinning_Type, "", new { @class = "text-danger", @Id = "dinningValidation" })</small>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
+                <h5><b>Number of Guests</b></h5>
+                <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
+                    @Html.EditorFor(model => model.NumberofGuest, new { htmlAttributes = new { @Id = "NumberofGuest", @class = "form-control", @onkeyup = "numberofguestValidation()" } })
+                    <small style="position:absolute">@Html.ValidationMessageFor(model => model.NumberofGuest, "", new { @class = "text-danger", @Id = "numberofguestValidation" })</small>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
+                <h5><b>Contact</b></h5>
+                <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
+                    @Html.EditorFor(model => model.Contact, new { htmlAttributes = new { @Id = "Contact", @class = "form-control", @onkeyup = "contactValidation()" } })
+                    <small style="position:absolute">@Html.ValidationMessageFor(model => model.Contact, "", new { @class = "text-danger", @Id = "contactValidation" })</small>
+                </div>
+            </div>
+
+            <div class="form-group" style="padding-left: 20px; margin-top: 5%;">
+                <h5><b>Category</b></h5>
+                <div class="col-md-auto" style="padding-left: 2px; padding-right: 30px">
+                    <select class="form-control" name="Category" id="Category" onchange="categoryValidation()">
+                        @if (TempData["Category"] != null)
+                        {
+                            <option value=@TempData["Category"]>@TempData["Category"]</option>
+                        }
+                        <option value="">--Select--</option>
+                        <option value="Vegetarian">Vegetarian</option>
+                        <option value="Non-Vegetarian">Non-Vegetarian</option>
+                        <option value="Vegan">Vegan</option>
+                    </select>
+                    <small style="position:absolute">@Html.ValidationMessageFor(model => model.Category, "", new { @class = "text-danger", @Id = "categoryValidation" })</small>
+                </div>
+            </div>
+
         </div>
     </div>
+</div>
     <div class="modal-footer">
-        <button type="button" class="btn btn-sm pull-right"  data-dismiss="modal">Cancel</button>
-        <button type="button" id="saveclick" onclick="Savebooking()" class="btn btn-sm btn-success pull-right" >Save</button>
-        <button type="button" id="editclick" onclick="enableedit()" class="btn btn-sm btn-warning pull-right" >Edit</button>
+        <button type="button" class="btn btn-sm pull-right" style=" margin-top: 0px; margin-bottom: -2px;"   data-dismiss="modal">Cancel</button>
+        <button type="button" id="saveclick" onclick="Savebooking()"  style="padding-left: 24px;margin-right: 8px;margin-bottom: -84px;margin-top: 0px;" class="btn btn-sm btn-success pull-right" >Save</button>
+        <button type="button" id="editclick" onclick="enableedit()"  style="padding-left: 24px;margin-right: 8px;margin-bottom: -84px;margin-top: 0px;" class="btn btn-sm btn-warning pull-right" >Edit</button>
     </div>
 </form>
 
@@ -115,8 +112,7 @@
             document.getElementById("titlename").innerHTML = "Edit Booking";
              $('.form-control').attr('disabled', false);
              $("#editclick").hide();
-             //$('#Dinning_Type').val('@Model.Dinning_Type');
-             //$('#Category').val('@Model.Category');
+
         }
         $(function () {
             $('#Datetime').keypress(function (res) {

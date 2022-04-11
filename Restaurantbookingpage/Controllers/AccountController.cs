@@ -13,13 +13,17 @@ using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
 using System.Text;
 using ArrayToPdf;
-
+using System.Net.Mail;
+using System.Net;
 
 namespace Restaurantbookingpage.Controllers
 {
+   
     public class AccountController : Controller
     {
         SqlConnection con = new SqlConnection("Data Source=ASUSX515;Initial Catalog=Bookingpage;Integrated Security=True");
+
+
 
         [Authorize]
         public ActionResult Index()
@@ -27,7 +31,116 @@ namespace Restaurantbookingpage.Controllers
             return View();
         }
 
-        // GET: UserInfo
+      
+        [HttpGet]
+        public ActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+
+      
+
+
+        [HttpPost]
+        public ActionResult ForgotPassword(ForgotPassword ForgotPasswordModel)
+        {
+            try
+            {
+
+                if (IsValidReset(ForgotPasswordModel.Email, ForgotPasswordModel.ContactNo))
+                {
+                  
+                    return RedirectToAction("ResetPassword","Account");
+                } 
+                else if(IsValidResetAdmin(ForgotPasswordModel.Email, ForgotPasswordModel.ContactNo))
+                    {
+                    return RedirectToAction("ResetPasswordAdmin", "Account");
+                }
+                else
+                {
+                    ModelState.AddModelError("", "Your Email or ContactNo is incorrect");
+                }
+                return View(ForgotPasswordModel);
+            }
+            catch (Exception e)
+            {
+                ModelState.AddModelError("", e);
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult ResetPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult ResetPassword(ResetPasswordModel PasswordObj)
+        {
+            try
+            {
+                Accountdbhandle objdbhandle = new Accountdbhandle();
+                if (objdbhandle.ResetPassword(PasswordObj.NewPassword, PasswordObj.Email))
+                {
+                    ViewBag.AlertMsg = "Account Deleted Successfully";
+                    return RedirectToAction("Login", "Account");
+                }
+
+                else if (objdbhandle.ResetPasswordAdmin(PasswordObj.NewPassword, PasswordObj.Email))
+                {
+                    ViewBag.AlertMsg = "Success";
+                    return RedirectToAction("Login", "Account");
+                }
+                else
+                {
+
+                    return HttpNotFound();
+                }
+
+
+
+            }
+            catch
+            {
+                return View();
+            }
+        }
+
+        [HttpGet]
+        public ActionResult ResetPasswordAdmin()
+        {
+            return View();
+        }
+
+
+        [HttpPost]
+        public ActionResult ResetPasswordAdmin(ResetPasswordModel PasswordObj)
+        {
+            try
+            {
+                Accountdbhandle objdbhandle = new Accountdbhandle();
+                if (objdbhandle.ResetPasswordAdmin(PasswordObj.NewPassword, PasswordObj.Email))
+                {
+                    ViewBag.AlertMsg = "Account Deleted Successfully";
+                    return RedirectToAction("Login", "Account");
+                }
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+            catch
+            {
+                return Json(false, JsonRequestBehavior.AllowGet);
+            }
+        }
+
+        [Authorize]
+        public ActionResult List()
+        {
+            return View();
+        }
+
+        
         [Authorize]
         public ActionResult UserInfo()
         {
@@ -36,7 +149,6 @@ namespace Restaurantbookingpage.Controllers
 
 
         [HttpPost]
-
         public ActionResult AccountData()
         {
             try
@@ -59,7 +171,7 @@ namespace Restaurantbookingpage.Controllers
             }
         }
 
-        // Add new Registration
+        
         [HttpGet]
         public ActionResult Create(string operation)
         {
@@ -78,7 +190,7 @@ namespace Restaurantbookingpage.Controllers
             }
         }
 
-        // View Registration
+       
         [HttpGet]
         public ActionResult View(string operation, int id)
         {
@@ -93,7 +205,7 @@ namespace Restaurantbookingpage.Controllers
             return PartialView("_OperationPartial", objaccount);
         }
 
-        // Edit Registration
+        
         [HttpGet]
         public ActionResult Edit(string operation, int id)
         {
@@ -108,26 +220,8 @@ namespace Restaurantbookingpage.Controllers
             return PartialView("_OperationPartial", objaccount);
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult CreateEdit(Registration objaccount)
-        {
-            Accountdbhandle objdbhandle = new Accountdbhandle();
-
-            if (objaccount.Id > 0)
-            {
-                objdbhandle.UpdateDetails(objaccount);
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-            else
-            {
-                objdbhandle.UpdateDetails(objaccount);
-                return Json(true, JsonRequestBehavior.AllowGet);
-            }
-
-        }
-
-        // Delete Booking
+        
+       
         public ActionResult DeletePartial(string operation, int id)
         {
             Accountdbhandle objdbhandle = new Accountdbhandle();
@@ -138,6 +232,7 @@ namespace Restaurantbookingpage.Controllers
             }
             return PartialView("_DeletePartial", objaccount);
         }
+        [HttpPost]
         public ActionResult Delete(int id)
         {
             try
@@ -155,6 +250,7 @@ namespace Restaurantbookingpage.Controllers
                 return Json(false, JsonRequestBehavior.AllowGet);
             }
         }
+        
 
         [HttpGet]
         public ActionResult Print()
@@ -185,8 +281,14 @@ namespace Restaurantbookingpage.Controllers
         }
   
         [HttpGet]
-        public ActionResult Login()
+        [AllowAnonymous]
+        public ActionResult Login(string returnUrl)
         {
+            if (User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("List", "Account");
+            }
+            ViewBag.ReturnUrl = returnUrl ?? Url.Action("List", "Account");
             return View();
         }
 
@@ -205,7 +307,7 @@ namespace Restaurantbookingpage.Controllers
             else if (IsValidAdmin(LoginViewModel.Email, LoginViewModel.Password))
             {
                 FormsAuthentication.SetAuthCookie(LoginViewModel.Email, false);
-                return RedirectToAction("Index", "Account");
+                return RedirectToAction("List", "Account");
             }
             else
             {
@@ -220,12 +322,6 @@ namespace Restaurantbookingpage.Controllers
             return View();
         }
 
-        [HttpGet]
-        [Authorize]
-        public ActionResult Register()
-        {
-            return View();
-        }
         
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -233,43 +329,78 @@ namespace Restaurantbookingpage.Controllers
         {
 
             bool authenticated = Request.IsAuthenticated;
+            Accountdbhandle db=new Accountdbhandle();
             var AdUser = User.Identity.Name;
-            RegistrationViewModel.CreatedBy = AdUser;
-            RegistrationViewModel.ModifiedBy = AdUser;
+          Registration user=db.GetUserByName(AdUser);
+
+            RegistrationViewModel.CreatedBy = user.Id;
+            RegistrationViewModel.ModifiedBy = 0;  
             RegistrationViewModel.CreatedDate= DateTime.Now.ToString();
-            RegistrationViewModel.ModifiedDate = DateTime.Now.ToString();
+            RegistrationViewModel.ModifiedDate = "";
 
             try
             {
                 if (ModelState.IsValid)
                 {
-                  
+
                     if (!IsUserExist(RegistrationViewModel.Email))
+
                     {
-                        string query = "insert into TblUsers values (@Name,@Email,@Password,@ContactNo,@CreatedBy,@CreatedDate,@ModifiedBy,@ModifiedDate)";
-                     
-                        using (SqlCommand cmd = new SqlCommand(query, con))
+                        if (!RegistrationViewModel.Isadmin)
                         {
-                            cmd.Connection = con;
-                            cmd.Parameters.AddWithValue("@Name", RegistrationViewModel.Name);
-                            cmd.Parameters.AddWithValue("@Email", RegistrationViewModel.Email);
-                            cmd.Parameters.AddWithValue("@Password", Base64Encode(RegistrationViewModel.Password));
-                            cmd.Parameters.AddWithValue("@ContactNo", RegistrationViewModel.ContactNo);
-                            cmd.Parameters.AddWithValue("@CreatedBy", RegistrationViewModel.CreatedBy);
-                            cmd.Parameters.AddWithValue("@CreatedDate",RegistrationViewModel.CreatedDate);
-                            cmd.Parameters.AddWithValue("@ModifiedBy", RegistrationViewModel.ModifiedBy);
-                            cmd.Parameters.AddWithValue("@ModifiedDate", RegistrationViewModel.ModifiedDate);
-                            con.Open();
-                            int i = cmd.ExecuteNonQuery();
-                            con.Close();
-                            if (i > 0)
+
+
+                            string query = "insert into TblUsers values (@Name,@Email,@Password,@ContactNo,@CreatedBy,@CreatedDate,@ModifiedBy,@ModifiedDate,@Deleted)";
+
+                            using (SqlCommand cmd = new SqlCommand(query, con))
                             {
-                                //FormsAuthentication.SetAuthCookie(RegistrationViewModel.Email, false);
-                                return RedirectToAction("Index", "Account");
+                                cmd.Connection = con;
+                                cmd.Parameters.AddWithValue("@Name", RegistrationViewModel.Name);
+                                cmd.Parameters.AddWithValue("@Email", RegistrationViewModel.Email);
+                                cmd.Parameters.AddWithValue("@Password", Base64Encode(RegistrationViewModel.Password));
+                                cmd.Parameters.AddWithValue("@ContactNo", RegistrationViewModel.ContactNo);
+                                cmd.Parameters.AddWithValue("@CreatedBy", RegistrationViewModel.CreatedBy);
+                                cmd.Parameters.AddWithValue("@CreatedDate", RegistrationViewModel.CreatedDate);
+                                cmd.Parameters.AddWithValue("@ModifiedBy", RegistrationViewModel.ModifiedBy);
+                                cmd.Parameters.AddWithValue("@ModifiedDate", RegistrationViewModel.ModifiedDate);
+                                cmd.Parameters.AddWithValue("@Deleted", RegistrationViewModel.Deleted);
+                                con.Open();
+                                int i = cmd.ExecuteNonQuery();
+                                con.Close();
+                                if (i > 0)
+                                {
+                                    return RedirectToAction("Index", "Account");
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", "something went wrong try later!");
+                                }
                             }
-                            else
+                        }
+                        else if (RegistrationViewModel.Isadmin)
+                        {
+                            string query = "insert into TblAdmin values (@Name,@Email,@Password,@ContactNo)";
+
+                            using (SqlCommand cmd = new SqlCommand(query, con))
                             {
-                                ModelState.AddModelError("", "something went wrong try later!");
+                                cmd.Connection = con;
+                                cmd.Parameters.AddWithValue("@Name", RegistrationViewModel.Name);
+                                cmd.Parameters.AddWithValue("@Email", RegistrationViewModel.Email);
+                                cmd.Parameters.AddWithValue("@Password", Base64Encode(RegistrationViewModel.Password));
+                                cmd.Parameters.AddWithValue("@ContactNo", RegistrationViewModel.ContactNo);
+                               
+                              
+                                con.Open();
+                                int i = cmd.ExecuteNonQuery();
+                                con.Close();
+                                if (i > 0)
+                                {
+                                    return RedirectToAction("Index", "Account");
+                                }
+                                else
+                                {
+                                    ModelState.AddModelError("", "something went wrong try later!");
+                                }
                             }
                         }
                     }
@@ -279,10 +410,7 @@ namespace Restaurantbookingpage.Controllers
                     }
 
                 }
-                //else
-                //{
-                //    ModelState.AddModelError("", "Data is not correct");
-                //}
+               
             }
             catch (Exception e)
             {
@@ -291,13 +419,20 @@ namespace Restaurantbookingpage.Controllers
             return View();
         }
 
+
+        
+
+
         public ActionResult EditUser(Registration RegistrationViewModel)
         {
 
             bool authenticated = Request.IsAuthenticated;
+            Accountdbhandle db = new Accountdbhandle();
             var AdUser = User.Identity.Name;
+            Registration user = db.GetUserByName(AdUser);
+
             //RegistrationViewModel.CreatedBy = AdUser;
-            RegistrationViewModel.ModifiedBy = AdUser;
+            RegistrationViewModel.ModifiedBy = user.Id;
             //RegistrationViewModel.CreatedDate = DateTime.Now.ToString();
             RegistrationViewModel.ModifiedDate = DateTime.Now.ToString();
 
@@ -306,7 +441,7 @@ namespace Restaurantbookingpage.Controllers
                 if (ModelState.IsValid)
                 {
 
-                        string query = "Update TblUsers set Name=@Name,Email=@Email,Password=@Password,ContactNo=@ContactNo,ModifiedBy=@ModifiedBy,ModifiedDate=@ModifiedDate where Id=@Id";
+                        string query = "Update TblUsers set Name=@Name,Email=@Email,Password=@Password,ContactNo=@ContactNo,ModifiedBy=@ModifiedBy,ModifiedDate=@ModifiedDate,Deleted=@Deleted where Id=@Id";
                         
                         using (SqlCommand cmd = new SqlCommand(query, con))
                         {
@@ -318,7 +453,9 @@ namespace Restaurantbookingpage.Controllers
                             cmd.Parameters.AddWithValue("@ContactNo", RegistrationViewModel.ContactNo);
                             cmd.Parameters.AddWithValue("@ModifiedBy", RegistrationViewModel.ModifiedBy);
                             cmd.Parameters.AddWithValue("@ModifiedDate", RegistrationViewModel.ModifiedDate);
-                            con.Open();
+                            cmd.Parameters.AddWithValue("@Deleted", RegistrationViewModel.Deleted);
+
+                        con.Open();
                             int i = cmd.ExecuteNonQuery();
                             con.Close();
                             if (i > 0)
@@ -326,19 +463,16 @@ namespace Restaurantbookingpage.Controllers
                                 //FormsAuthentication.SetAuthCookie(RegistrationViewModel.Email, false);
                                 return RedirectToAction("Index", "Account");
                             }
-                            else
-                            {
-                                ModelState.AddModelError("", "something went wrong try later!");
-                            }
+                        else
+                        {
+                            ModelState.AddModelError("", "something went wrong try later!");
                         }
-                    
-                   
+                        }
+
+
 
                 }
-                //else
-                //{
-                //    ModelState.AddModelError("", "Data is not correct");
-                //}
+               
             }
             catch (Exception e)
             {
@@ -350,6 +484,8 @@ namespace Restaurantbookingpage.Controllers
 
         public ActionResult LogOut()
         {
+           
+         
             FormsAuthentication.SignOut();
             return RedirectToAction("Login", "Account");
         }
@@ -396,6 +532,54 @@ namespace Restaurantbookingpage.Controllers
             }
             return IsValid;
         }
+        private bool IsValidReset(string email, string contactno)
+        {
+            
+            bool IsValid = false;
+            string query = "select * from TblUsers where Email=@email and ContactNo=@contactno and Deleted=0";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@Email", email);
+                cmd.Parameters.AddWithValue("@ContactNo",contactno);
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                sda.Fill(dt);
+                con.Open();
+                int i = cmd.ExecuteNonQuery();
+                con.Close();
+                if (dt.Rows.Count > 0)
+                {
+                    IsValid = true;
+                }
+            }
+            return IsValid;
+        }
+
+        private bool IsValidResetAdmin(string email, string contactno)
+        {
+
+            bool IsValid = false;
+            string query = "select * from TblAdmin where Email=@email and ContactNo=@contactno";
+            using (SqlCommand cmd = new SqlCommand(query, con))
+            {
+                cmd.Parameters.AddWithValue("@Email", email);
+                cmd.Parameters.AddWithValue("@ContactNo", contactno);
+                SqlDataAdapter sda = new SqlDataAdapter(cmd);
+                DataTable dt = new DataTable();
+                sda.Fill(dt);
+                con.Open();
+                int i = cmd.ExecuteNonQuery();
+                con.Close();
+                if (dt.Rows.Count > 0)
+                {
+                    IsValid = true;
+                }
+            }
+            return IsValid;
+        }
+
+
+
         private bool IsValidAdmin(string email, string password)
         {
             //var encryptpassowrd = Base64Encode(password);
@@ -404,7 +588,7 @@ namespace Restaurantbookingpage.Controllers
             using (SqlCommand cmd = new SqlCommand(query, con))
             {
                 cmd.Parameters.AddWithValue("@Email", email);
-                cmd.Parameters.AddWithValue("@Password", password);
+                cmd.Parameters.AddWithValue("@Password",password);
                 SqlDataAdapter sda = new SqlDataAdapter(cmd);
                 DataTable dt = new DataTable();
                 sda.Fill(dt);

@@ -14,36 +14,10 @@ namespace Restaurantbookingpage
         private SqlConnection con;
         private void connection()
         {
-            //string constring = ConfigurationManager.ConnectionStrings["BookingConn"].ToString();
-            //string constring = "Data Source=LAPTOP-5IQ1TLRU;Initial Catalog=Bookingpage;Integrated Security=True";
             string constring = "Data Source=ASUSX515;Initial Catalog=Bookingpage;Integrated Security=True";
             con = new SqlConnection(constring);
         }
-        // **************** ADD NEW Account *********************
-        public bool AddAccount(Registration smodel)
-        {
-            connection();
-            SqlCommand cmd = new SqlCommand("AddNewAccount", con);
-            cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.AddWithValue("@Name", smodel.Name);
-            cmd.Parameters.AddWithValue("@Email", smodel.Email);
-            cmd.Parameters.AddWithValue("@Password", smodel.Password);
-            cmd.Parameters.AddWithValue("@ContactNo", smodel.ContactNo);
-            cmd.Parameters.AddWithValue("@CreatedBy",smodel.CreatedBy);
-            cmd.Parameters.AddWithValue("@CreatedDate", smodel.CreatedBy);
-            cmd.Parameters.AddWithValue("@ModifiedBy", smodel.ModifiedBy);
-            cmd.Parameters.AddWithValue("@ModifiedDate", smodel.ModifiedDate);
-
-            con.Open();
-            int i = cmd.ExecuteNonQuery();
-            con.Close();
-
-            if (i >= 1)
-                return true;
-            else
-                return false;
-        }
+      
 
         // ********** View Account DETAILS ********************
 
@@ -76,12 +50,36 @@ namespace Restaurantbookingpage
                             Email = Convert.ToString(dr["Email"]),
                             Password= Convert.ToString(dr["Password"]),
                             ContactNo= Convert.ToString(dr["ContactNo"]),
-                            CreatedBy= Convert.ToString(dr["CreatedBy"]),
+                            CreatedBy= Convert.ToInt32(dr["CreatedBy"]),
                             CreatedDate = Convert.ToString(dr["CreatedDate"]),
-                           ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                           ModifiedBy = Convert.ToInt32(dr["ModifiedBy"]),
                             ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
+                            Deleted=Convert.ToInt32(dr["Deleted"])
                         });
+
                 }
+                foreach (var n in accountList)
+                {
+                    if (n.CreatedBy > 0)
+                    {
+                        var user = GetAdminById(n.CreatedBy);
+                        n.CreatedByName = user.Name;
+
+                    }
+
+                    if (n.ModifiedBy > 0)
+                    {
+                        var user = GetAdminById(n.ModifiedBy);
+                        n.ModifiedByName = user.Name;
+                    }
+                    else
+                    {
+                        var user = GetUserByName(n.ModifiedByName);
+                        n.ModifiedBy = user.ModifiedBy;
+                    }
+
+                }
+
             }
             catch (Exception ex)
             {
@@ -89,41 +87,83 @@ namespace Restaurantbookingpage
             }
             return accountList;
         }
-      
-        public List<Registration> GetAccounts()
+
+        public Registration GetUsersByName(string Email)
         {
             connection();
-            List<Registration> Accountlist = new List<Registration>();
-
-            SqlCommand cmd = new SqlCommand("GetAccountDetails", con);
+            Registration user = new Registration();
+            SqlCommand cmd = new SqlCommand("GetUsersByName", con);
             cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Email", Email);
             SqlDataAdapter sd = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
-
             con.Open();
-            sd.Fill(dt);
-            con.Close();
-
-            foreach (DataRow dr in dt.Rows)
+            try
             {
-                Accountlist.Add(
-                    new Registration
+
+                if (con.State == ConnectionState.Open)
+                {
+                    sd.Fill(dt);
+                    con.Close();
+                    if (dt.Rows.Count > 0)
                     {
-                        Id = Convert.ToInt32(dr["Id"]),
-                        Name = Convert.ToString(dr["Name"]),
-                        Email = Convert.ToString(dr["Email"]),
-                        Password = Convert.ToString(dr["Password"]),
-                        ContactNo = Convert.ToString(dr["ContactNo"]),
-                        CreatedBy = Convert.ToString(dr["CreatedBy"]),
-                        CreatedDate = Convert.ToString(dr["CreatedDate"]),
-                        ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
-                        ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
-                    });
+                        user.Id = Convert.ToInt32(dt.Rows[0]["Id"]);
+                        user.Name = Convert.ToString(dt.Rows[0]["Name"]);
+                        user.Email = Convert.ToString(dt.Rows[0]["Email"]);
+                        user.Password = Convert.ToString(dt.Rows[0]["Password"]);
+                        user.ContactNo = Convert.ToString(dt.Rows[0]["ContactNo"]);
+                        user.CreatedBy = Convert.ToInt32(dt.Rows[0]["CreatedBy"]);
+                        user.CreatedDate = Convert.ToString(dt.Rows[0]["CreatedDate"]);
+                        user.ModifiedBy = Convert.ToInt32(dt.Rows[0]["ModifiedBy"]);
+                        user.ModifiedDate = Convert.ToString(dt.Rows[0]["ModifiedDate"]);
+                        user.Deleted = Convert.ToInt32(dt.Rows[0]["Deleted"]);
+
+                    }
+                }
             }
-            return Accountlist;
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+            }
+            return user;
         }
 
-        // ***************** UPDATE Account DETAILS *********************
+
+        public Registration GetUserByName(string Email)
+        {
+            connection();
+            Registration user = new Registration();
+            SqlCommand cmd = new SqlCommand("GetUserByName", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Email", Email);
+            SqlDataAdapter sd = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            con.Open();
+            try
+            {
+
+                if (con.State == ConnectionState.Open)
+                {
+                    sd.Fill(dt);
+                    con.Close();
+                    if (dt.Rows.Count > 0)
+                    {
+                        user.Id = Convert.ToInt32(dt.Rows[0]["Id"]);
+                        user.Name = Convert.ToString(dt.Rows[0]["Name"]);
+                        user.Email = Convert.ToString(dt.Rows[0]["Email"]);
+                        user.Password = Convert.ToString(dt.Rows[0]["Password"]);
+                        user.ContactNo = Convert.ToString(dt.Rows[0]["ContactNo"]);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+            }
+            return user;
+        }
+
         public List<Registration> GetById(int id)
         {
            
@@ -153,10 +193,14 @@ namespace Restaurantbookingpage
                                 Email = Convert.ToString(dr["Email"]),
                                 Password = Base64Decode(Convert.ToString(dr["Password"])),
                                 ContactNo = Convert.ToString(dr["ContactNo"]),
-                                CreatedBy = Convert.ToString(dr["CreatedBy"]),
+                                CreatedBy = Convert.ToInt32(dr["CreatedBy"]),
                                 CreatedDate = Convert.ToString(dr["CreatedDate"]),
-                                ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                                ModifiedBy = Convert.ToInt32(dr["ModifiedBy"]),
                                 ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
+                                Deleted = Convert.ToInt32(dr["Deleted"])
+
+
+
                             });
                     }
                 }
@@ -167,36 +211,50 @@ namespace Restaurantbookingpage
             }
             return accountlist;
             }
-        public static string Base64Decode(string base64EncodedData)
+
+
+
+        public Registration GetAdminById(int id)
         {
-            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
-            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
-        }
-        public bool UpdateDetails(Registration smodel)
-        {
+
 
             connection();
-            SqlCommand cmd = new SqlCommand("UpdateAccountDetails", con);
+            Registration user = new Registration();
+            SqlCommand cmd = new SqlCommand("GetAdminById", con);
             cmd.CommandType = CommandType.StoredProcedure;
-
-            cmd.Parameters.AddWithValue("@Id", smodel.Id);
-            cmd.Parameters.AddWithValue("@Name", smodel.Name);
-            cmd.Parameters.AddWithValue("@Email", smodel.Email);
-            cmd.Parameters.AddWithValue("@Password", smodel.Password);
-            cmd.Parameters.AddWithValue("@ContactNo", smodel.ContactNo);
-            cmd.Parameters.AddWithValue("@CreatedBy", smodel.CreatedBy);
-            cmd.Parameters.AddWithValue("@CreatedDate", smodel.CreatedBy);
-            cmd.Parameters.AddWithValue("@ModifiedBy", smodel.ModifiedBy);
-            cmd.Parameters.AddWithValue("@ModifiedDate", smodel.ModifiedDate);
+            cmd.Parameters.AddWithValue("@Id", id);
+            SqlDataAdapter sd = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
             con.Open();
-            int i = cmd.ExecuteNonQuery();
-            con.Close();
+            try
+            {
 
-            if (i >= 1)
-                return true;
-            else
-                return false;
+                if (con.State == ConnectionState.Open)
+                {
+                    sd.Fill(dt);
+                    con.Close();
+                    if (dt.Rows.Count > 0)
+                    {
+                        user.Id = Convert.ToInt32(dt.Rows[0]["Id"]);
+                        user.Name = Convert.ToString(dt.Rows[0]["Name"]);
+                        user.Email = Convert.ToString(dt.Rows[0]["Email"]);
+                        user.Password = Convert.ToString(dt.Rows[0]["Password"]);
+                        user.ContactNo = Convert.ToString(dt.Rows[0]["ContactNo"]);
+                        
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+            }
+            return user;
         }
+
+
+
+      
 
         // ********************** DELETE Account DETAILS *******************
         public bool DeleteAccount(int id)
@@ -216,7 +274,56 @@ namespace Restaurantbookingpage
             else
                 return false;
         }
+        public bool ResetPassword(string password,string email)
+        {
+            connection();
+            var encryptpassowrd = Base64Encode(password);
 
+            SqlCommand cmd = new SqlCommand("PasswordReset", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@email",email);
+            cmd.Parameters.AddWithValue("@password", encryptpassowrd);
+            con.Open();
+            int i = cmd.ExecuteNonQuery();
+            con.Close();
+
+            if (i >= 1)
+                return true;
+            else
+                return false;
+        }
+        public bool ResetPasswordAdmin(string password, string email)
+        {
+            connection();
+            var encryptpassowrd = Base64Encode(password);
+
+            SqlCommand cmd = new SqlCommand("PasswordResetAdmin", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+
+            cmd.Parameters.AddWithValue("@email", email);
+            cmd.Parameters.AddWithValue("@password", encryptpassowrd);
+            con.Open();
+            int i = cmd.ExecuteNonQuery();
+            con.Close();
+
+            if (i >= 1)
+                return true;
+            else
+                return false;
+        }
+
+
+        public static string Base64Encode(string plainText)
+        {
+            var plainTextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
+            return System.Convert.ToBase64String(plainTextBytes);
+        }
+        public static string Base64Decode(string base64EncodedData)
+        {
+            var base64EncodedBytes = System.Convert.FromBase64String(base64EncodedData);
+            return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
+        }
         public int GetCounts(string searchValue)
         {
             int count = 0;
@@ -263,10 +370,12 @@ namespace Restaurantbookingpage
                             Email = Convert.ToString(dr["Email"]),
                             Password = Convert.ToString(dr["Password"]),
                             ContactNo = Convert.ToString(dr["ContactNo"]),
-                            CreatedBy = Convert.ToString(dr["CreatedBy"]),
+                            CreatedBy = Convert.ToInt32(dr["CreatedBy"]),
                             CreatedDate = Convert.ToString(dr["CreatedDate"]),
-                            ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                            ModifiedBy = Convert.ToInt32(dr["ModifiedBy"]),
                             ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
+                            Deleted = Convert.ToInt32(dr["Deleted"])
+
                         });
                 }
             }

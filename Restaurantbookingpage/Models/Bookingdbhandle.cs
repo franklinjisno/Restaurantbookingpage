@@ -15,13 +15,10 @@ namespace Restaurantbookingpage
         private SqlConnection con;
         private void connection()
         {
-            //string constring = ConfigurationManager.ConnectionStrings["BookingConn"].ToString();
-            //string constring = "Data Source=LAPTOP-5IQ1TLRU;Initial Catalog=Bookingpage;Integrated Security=True";
             string constring = "Data Source=ASUSX515;Initial Catalog=Bookingpage;Integrated Security=True";
             con = new SqlConnection(constring);
         }
 
-        // **************** ADD NEW Booking *********************
         public bool AddBooking(Booking smodel)
         {
             connection();
@@ -82,65 +79,135 @@ namespace Restaurantbookingpage
                             NumberofGuest = Convert.ToInt32(dr["NumberofGuest"]),
                             Contact = Convert.ToString(dr["Contact"]),
                             Category = Convert.ToString(dr["Category"]),
-                             CreatedBy = Convert.ToString(dr["CreatedBy"]),
+                             CreatedBy = Convert.ToInt32(dr["CreatedBy"]),
                             CreatedDate = Convert.ToString(dr["CreatedDate"]),
-                            ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                            ModifiedBy = Convert.ToInt32(dr["ModifiedBy"]),
                             ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
 
                         });
                 }
+                foreach (var n in bookingList)
+                {
+                    if (n.CreatedBy > 1000)
+                    {
+                        var user = GetUserById(n.CreatedBy);
+                        n.CreatedByName = user.Name;
+                    }
+                    else
+
+                    {
+                        Accountdbhandle db=new Accountdbhandle();
+                        var user = db.GetAdminById(n.CreatedBy);
+                        n.CreatedByName = user.Name;
+                    }
+                    if (n.ModifiedBy > 1000)
+                    {
+                        var user = GetUserById(n.ModifiedBy);
+                        n.ModifiedByName = user.Name;
+                    }
+                    else
+                    {
+                        Accountdbhandle db = new Accountdbhandle();
+
+                        var user = db.GetAdminById(n.ModifiedBy);
+                        n.ModifiedByName = user.Name;
+                    }
+
+                }
+
             }
-                catch (Exception ex)
+
+
+
+            catch (Exception ex)
                 {
                     throw;
                 }
             return bookingList;
         }
-        public List<Registration> GetAccount(int pageIndex, int pageSize, string searchValue)
+
+        public Registration GetUserById(int id)
         {
 
-            connection();
-            List<Registration> bookingList = new List<Registration>();
 
-            SqlCommand cmd = new SqlCommand("GetAccountUser", con);
+            connection();
+            Registration user = new Registration();
+            SqlCommand cmd = new SqlCommand("GetUserById", con);
             cmd.CommandType = CommandType.StoredProcedure;
-            cmd.Parameters.AddWithValue("@pageIndex", pageIndex);
-            cmd.Parameters.AddWithValue("@pageSize", pageSize);
-            //cmd.Parameters.AddWithValue("@searchValue", searchValue);
+            cmd.Parameters.AddWithValue("@Id", id);
             SqlDataAdapter sd = new SqlDataAdapter(cmd);
             DataTable dt = new DataTable();
-
+            con.Open();
             try
             {
-                con.Open();
-                sd.Fill(dt);
-                con.Close();
 
-                foreach (DataRow dr in dt.Rows)
+                if (con.State == ConnectionState.Open)
                 {
-                    bookingList.Add(
-                        new Registration
-                        {
-                            Id = Convert.ToInt32(dr["Id"]),
-                            Name = Convert.ToString(dr["Name"]),
-                            Email = Convert.ToString(dr["Email"]),
-                            Password = Convert.ToString(dr["Password"]),
-                            ContactNo = Convert.ToString(dr["ContactNo"]),
-                            CreatedBy = Convert.ToString(dr["CreatedBy"]),
-                            CreatedDate = Convert.ToString(dr["CreatedDate"]),
-                            ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
-                            ModifiedDate = Convert.ToString(dr["ModifiedDate"])
+                    sd.Fill(dt);
+                    con.Close();
+                    if (dt.Rows.Count > 0)
+                    {
+                        user.Id = Convert.ToInt32(dt.Rows[0]["Id"]);
+                        user.Name = Convert.ToString(dt.Rows[0]["Name"]);
+                        user.Email = Convert.ToString(dt.Rows[0]["Email"]);
+                        user.Password = Convert.ToString(dt.Rows[0]["Password"]);
+                        user.ContactNo = Convert.ToString(dt.Rows[0]["ContactNo"]);
 
-                        });
+
+                    }
                 }
             }
             catch (Exception ex)
             {
                 string msg = ex.Message;
-                throw;
             }
-            return bookingList;
+            return user;
         }
+
+
+        public Registration GetUsersByName(string Email)
+        {
+            connection();
+         Registration user = new Registration();
+            SqlCommand cmd = new SqlCommand("GetUsersByName", con);
+            cmd.CommandType = CommandType.StoredProcedure;
+            cmd.Parameters.AddWithValue("@Email", Email);
+            SqlDataAdapter sd = new SqlDataAdapter(cmd);
+            DataTable dt = new DataTable();
+            con.Open();
+            try
+            {
+
+                if (con.State == ConnectionState.Open)
+                {
+                    sd.Fill(dt);
+                    con.Close();
+                    if (dt.Rows.Count > 0)
+                    {
+                        user.Id = Convert.ToInt32(dt.Rows[0]["Id"]);
+                        user.Name = Convert.ToString(dt.Rows[0]["Name"]);
+                        user.Email = Convert.ToString(dt.Rows[0]["Email"]);
+                        user.Password = Convert.ToString(dt.Rows[0]["Password"]);
+                        user.ContactNo = Convert.ToString(dt.Rows[0]["ContactNo"]);
+                        user.CreatedBy = Convert.ToInt32(dt.Rows[0]["CreatedBy"]);
+                        user.CreatedDate = Convert.ToString(dt.Rows[0]["CreatedDate"]);
+                        user.ModifiedBy = Convert.ToInt32(dt.Rows[0]["ModifiedBy"]);
+                        user.ModifiedDate = Convert.ToString(dt.Rows[0]["ModifiedDate"]);
+                        user.Deleted = Convert.ToInt32(dt.Rows[0]["Deleted"]);
+
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                string msg = ex.Message;
+            }
+            return user;
+        }
+
+
+
+      
         public List<Booking> GetBookings()
         {
             connection();
@@ -167,9 +234,9 @@ namespace Restaurantbookingpage
                         Category = Convert.ToString(dr["Category"]),
                         Dinning_Type = Convert.ToString(dr["Dinning_Type"]),
                         NumberofGuest = Convert.ToInt32(dr["NumberofGuest"]),
-                        CreatedBy = Convert.ToString(dr["CreatedDate"]),
+                        CreatedBy = Convert.ToInt32(dr["CreatedBy"]),
                         CreatedDate = Convert.ToString(dr["CreatedDate"]),
-                        ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                        ModifiedBy = Convert.ToInt32(dr["ModifiedBy"]),
                         ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
 
                     });
@@ -204,9 +271,9 @@ namespace Restaurantbookingpage
                             NumberofGuest = Convert.ToInt32(dr["NumberofGuest"]),
                             Contact = Convert.ToString(dr["Contact"]),
                             Category = Convert.ToString(dr["Category"]),
-                             CreatedBy = Convert.ToString(dr["CreatedDate"]),
+                             CreatedBy = Convert.ToInt32(dr["CreatedBy"]),
                             CreatedDate = Convert.ToString(dr["CreatedDate"]),
-                            ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                            ModifiedBy = Convert.ToInt32(dr["ModifiedBy"]),
                             ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
 
                         });
@@ -225,7 +292,8 @@ namespace Restaurantbookingpage
             cmd.Parameters.AddWithValue("@Datetime", smodel.Datetime);
             cmd.Parameters.AddWithValue("@Category", smodel.Category);
             cmd.Parameters.AddWithValue("@Dinning_Type", smodel.Dinning_Type);
-            cmd.Parameters.AddWithValue("@NumberofGuest", smodel.NumberofGuest);
+            
+          cmd.Parameters.AddWithValue("@NumberofGuest", smodel.NumberofGuest);
             cmd.Parameters.AddWithValue("@Contact", smodel.Contact);
             cmd.Parameters.AddWithValue("@CreatedBy", smodel.CreatedBy);
             cmd.Parameters.AddWithValue("@CreatedDate", smodel.CreatedDate);
@@ -308,9 +376,9 @@ namespace Restaurantbookingpage
                             NumberofGuest = Convert.ToInt32(dr["NumberofGuest"]),
                             Contact = Convert.ToString(dr["Contact"]),
                             Category = Convert.ToString(dr["Category"]),
-                            CreatedBy = Convert.ToString(dr["CreatedDate"]),
+                            CreatedBy = Convert.ToInt32(dr["CreatedBy"]),
                             CreatedDate = Convert.ToString(dr["CreatedDate"]),
-                            ModifiedBy = Convert.ToString(dr["ModifiedBy"]),
+                            ModifiedBy = Convert.ToInt32(dr["ModifiedBy"]),
                             ModifiedDate = Convert.ToString(dr["ModifiedDate"]),
 
 
